@@ -1,0 +1,45 @@
+name: GutchinTouchTool
+options:
+  bundleIdPrefix: com.gutchin
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+
+targets:
+  GutchinTouchTool:
+    type: application
+    platform: macOS
+    sources:
+      - path: GutchinTouchTool
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.gutchin.touchtool
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        INFOPLIST_FILE: GutchinTouchTool/App/Info.plist
+        CODE_SIGN_ENTITLEMENTS: GutchinTouchTool/GutchinTouchTool.entitlements
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGNING_REQUIRED: "NO"
+        DEVELOPMENT_TEAM: ""
+        GENERATE_INFOPLIST_FILE: "NO"
+    preBuildScripts:
+      - name: Reset TCC Permissions
+        script: |
+          tccutil reset Accessibility com.gutchin.touchtool 2>/dev/null || true
+          tccutil reset AppleEvents com.gutchin.touchtool 2>/dev/null || true
+
+  GutchinTouchToolTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: GutchinTouchToolTests
+    dependencies:
+      - target: GutchinTouchTool
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        GENERATE_INFOPLIST_FILE: "YES"

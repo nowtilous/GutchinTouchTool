@@ -1,0 +1,573 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		019B9C7BA352AFC84AD954BB /* TrackpadPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1205874DEC0ED25A5E28FD /* TrackpadPipelineTests.swift */; };
+		047BD176EA8475D2CB843670 /* GestureConsoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835804504535BFFF0A615239 /* GestureConsoleView.swift */; };
+		19F61F782EE805CF7F5F3014 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1C96664AFA27E00FA324A5 /* AppState.swift */; };
+		4FCDFEF6108186D33C545E18 /* AppTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86395DA53EC150134A65426C /* AppTarget.swift */; };
+		52C199558636E32D42A6EE0C /* TrackpadMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9277918E0700B4DF497CC63A /* TrackpadMonitor.swift */; };
+		55F610E7C9360B6C61D064E4 /* TriggerListPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9AA128B0872E58AF518488 /* TriggerListPanel.swift */; };
+		5A8F422110A23E9ED97A3EF4 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F07B761A4890A129778071 /* WindowManager.swift */; };
+		5CFF9E4308528010D641FB27 /* LogSidePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455785A555FBE4C61B590D01 /* LogSidePanel.swift */; };
+		603D6FCF4F48391C35B93546 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF557E7C62CB384D2603CF41 /* AppDelegate.swift */; };
+		8F56617241408E093C881A1A /* GestureLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591388447B863AB1271B38FE /* GestureLog.swift */; };
+		903BFC8E7D8AD82702A59CE0 /* Trigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80BACC55ACE7DF1BF21705C /* Trigger.swift */; };
+		93A2106594D8B52D8E09F752 /* TriggerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0583DD6C77ADF7E2D5EA71E7 /* TriggerType.swift */; };
+		9A629E874BAE24B6D987B05A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70C26620895E16B05C76A98E /* Assets.xcassets */; };
+		A5DCAC912D1304E73F9958ED /* ActionExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB054EA1A8A7A5690A40B7D /* ActionExecutor.swift */; };
+		A81D2DD39D9C38F691EA8061 /* AppSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506189193F0CED5175427042 /* AppSidebar.swift */; };
+		AF52A804BBFA16C53BA10949 /* Preset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38683DC37492332DC1942B49 /* Preset.swift */; };
+		BAB81AC773B591DF8C84716F /* KeyboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */; };
+		C7665F020EFF44DD35CA065A /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DC958E2E845E35D6977C14 /* MainWindow.swift */; };
+		CAABE3329FC3CA4FCD5B2688 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C98385A38C1DA1F1848DCE /* Action.swift */; };
+		D253B7A0E38D382E3DD92932 /* ActionListPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AF0ADA1620D8A2021D60F5 /* ActionListPanel.swift */; };
+		DBAE98A258656174646D15F7 /* PresetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC1E20528882B20DA9398F5 /* PresetManager.swift */; };
+		E2128A12EA0C8CE46B2A4945 /* GutchinTouchToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015C76C28717C9F0481DE62D /* GutchinTouchToolApp.swift */; };
+		E4D58A8D6926A8E4B601C460 /* ConfigurationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AF6CD7F63515AC7907609D /* ConfigurationPanel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		69C00980C0C1CC66807B6494 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 953D4117B8782C04D3CD3591 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3C9FB7E272D97E99127B5FE4;
+			remoteInfo = GutchinTouchTool;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		015C76C28717C9F0481DE62D /* GutchinTouchToolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GutchinTouchToolApp.swift; sourceTree = "<group>"; };
+		0583DD6C77ADF7E2D5EA71E7 /* TriggerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerType.swift; sourceTree = "<group>"; };
+		1C1205874DEC0ED25A5E28FD /* TrackpadPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadPipelineTests.swift; sourceTree = "<group>"; };
+		26864A407E082224513C0272 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		33C98385A38C1DA1F1848DCE /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		38683DC37492332DC1942B49 /* Preset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preset.swift; sourceTree = "<group>"; };
+		3DB054EA1A8A7A5690A40B7D /* ActionExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionExecutor.swift; sourceTree = "<group>"; };
+		3F9AA128B0872E58AF518488 /* TriggerListPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerListPanel.swift; sourceTree = "<group>"; };
+		455785A555FBE4C61B590D01 /* LogSidePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogSidePanel.swift; sourceTree = "<group>"; };
+		480F59657C30BBA39ED8E388 /* GutchinTouchToolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GutchinTouchToolTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		506189193F0CED5175427042 /* AppSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSidebar.swift; sourceTree = "<group>"; };
+		52DC958E2E845E35D6977C14 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
+		591388447B863AB1271B38FE /* GestureLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureLog.swift; sourceTree = "<group>"; };
+		5E1C96664AFA27E00FA324A5 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		70C26620895E16B05C76A98E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7DC1E20528882B20DA9398F5 /* PresetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetManager.swift; sourceTree = "<group>"; };
+		835804504535BFFF0A615239 /* GestureConsoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureConsoleView.swift; sourceTree = "<group>"; };
+		86395DA53EC150134A65426C /* AppTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTarget.swift; sourceTree = "<group>"; };
+		9277918E0700B4DF497CC63A /* TrackpadMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadMonitor.swift; sourceTree = "<group>"; };
+		95AF6CD7F63515AC7907609D /* ConfigurationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPanel.swift; sourceTree = "<group>"; };
+		A1F07B761A4890A129778071 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardMonitor.swift; sourceTree = "<group>"; };
+		B6AF0ADA1620D8A2021D60F5 /* ActionListPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionListPanel.swift; sourceTree = "<group>"; };
+		BE0D11D3DF027F5FA85DFF70 /* GutchinTouchTool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GutchinTouchTool.entitlements; sourceTree = "<group>"; };
+		BFBEC8838C761C0A2C708534 /* GutchinTouchTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GutchinTouchTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF557E7C62CB384D2603CF41 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F80BACC55ACE7DF1BF21705C /* Trigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trigger.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		14E9AAEAF10C24DD7D83A0F2 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3DB054EA1A8A7A5690A40B7D /* ActionExecutor.swift */,
+				591388447B863AB1271B38FE /* GestureLog.swift */,
+				A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */,
+				7DC1E20528882B20DA9398F5 /* PresetManager.swift */,
+				9277918E0700B4DF497CC63A /* TrackpadMonitor.swift */,
+				A1F07B761A4890A129778071 /* WindowManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		2D8DF5E914563BEECDACBBDE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B6AF0ADA1620D8A2021D60F5 /* ActionListPanel.swift */,
+				506189193F0CED5175427042 /* AppSidebar.swift */,
+				95AF6CD7F63515AC7907609D /* ConfigurationPanel.swift */,
+				835804504535BFFF0A615239 /* GestureConsoleView.swift */,
+				455785A555FBE4C61B590D01 /* LogSidePanel.swift */,
+				52DC958E2E845E35D6977C14 /* MainWindow.swift */,
+				3F9AA128B0872E58AF518488 /* TriggerListPanel.swift */,
+				B08BDB7EF3EDE9A433BDABF5 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2E489859415392280385BD38 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BFBEC8838C761C0A2C708534 /* GutchinTouchTool.app */,
+				480F59657C30BBA39ED8E388 /* GutchinTouchToolTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		65D39DB1E19B3F00E4F35ECC /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				5E1C96664AFA27E00FA324A5 /* AppState.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		79CC78645FF4612A524E102C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				CF557E7C62CB384D2603CF41 /* AppDelegate.swift */,
+				015C76C28717C9F0481DE62D /* GutchinTouchToolApp.swift */,
+				26864A407E082224513C0272 /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		9724929651E00043712F74DF /* GutchinTouchTool */ = {
+			isa = PBXGroup;
+			children = (
+				70C26620895E16B05C76A98E /* Assets.xcassets */,
+				BE0D11D3DF027F5FA85DFF70 /* GutchinTouchTool.entitlements */,
+				79CC78645FF4612A524E102C /* App */,
+				9D931E1B681815AD2C2066C6 /* Models */,
+				14E9AAEAF10C24DD7D83A0F2 /* Services */,
+				65D39DB1E19B3F00E4F35ECC /* ViewModels */,
+				2D8DF5E914563BEECDACBBDE /* Views */,
+			);
+			path = GutchinTouchTool;
+			sourceTree = "<group>";
+		};
+		9D931E1B681815AD2C2066C6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				33C98385A38C1DA1F1848DCE /* Action.swift */,
+				86395DA53EC150134A65426C /* AppTarget.swift */,
+				38683DC37492332DC1942B49 /* Preset.swift */,
+				F80BACC55ACE7DF1BF21705C /* Trigger.swift */,
+				0583DD6C77ADF7E2D5EA71E7 /* TriggerType.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B08BDB7EF3EDE9A433BDABF5 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		C8E781272C7F773BB07B5B41 = {
+			isa = PBXGroup;
+			children = (
+				9724929651E00043712F74DF /* GutchinTouchTool */,
+				D93F5FB07B64002E57D148E0 /* GutchinTouchToolTests */,
+				2E489859415392280385BD38 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D93F5FB07B64002E57D148E0 /* GutchinTouchToolTests */ = {
+			isa = PBXGroup;
+			children = (
+				1C1205874DEC0ED25A5E28FD /* TrackpadPipelineTests.swift */,
+			);
+			path = GutchinTouchToolTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3C9FB7E272D97E99127B5FE4 /* GutchinTouchTool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 072CB362C302F73CB9FD6B79 /* Build configuration list for PBXNativeTarget "GutchinTouchTool" */;
+			buildPhases = (
+				8ADB79A1414757B756B8C5C6 /* Reset TCC Permissions */,
+				8F65FDE81A152909BC6B27C5 /* Sources */,
+				723510EEF08CF65C7119912D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GutchinTouchTool;
+			packageProductDependencies = (
+			);
+			productName = GutchinTouchTool;
+			productReference = BFBEC8838C761C0A2C708534 /* GutchinTouchTool.app */;
+			productType = "com.apple.product-type.application";
+		};
+		740EC18DA37EF395B2BF51BD /* GutchinTouchToolTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB0D880CD4A627E65A64823E /* Build configuration list for PBXNativeTarget "GutchinTouchToolTests" */;
+			buildPhases = (
+				BD452D45B15EB6A721252A1D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				886A586431328C83DEAF817C /* PBXTargetDependency */,
+			);
+			name = GutchinTouchToolTests;
+			packageProductDependencies = (
+			);
+			productName = GutchinTouchToolTests;
+			productReference = 480F59657C30BBA39ED8E388 /* GutchinTouchToolTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		953D4117B8782C04D3CD3591 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					3C9FB7E272D97E99127B5FE4 = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = CD80ADFA1FB08E5067A2C837 /* Build configuration list for PBXProject "GutchinTouchTool" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C8E781272C7F773BB07B5B41;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 2E489859415392280385BD38 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3C9FB7E272D97E99127B5FE4 /* GutchinTouchTool */,
+				740EC18DA37EF395B2BF51BD /* GutchinTouchToolTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		723510EEF08CF65C7119912D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A629E874BAE24B6D987B05A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8ADB79A1414757B756B8C5C6 /* Reset TCC Permissions */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Reset TCC Permissions";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "tccutil reset Accessibility com.gutchin.touchtool 2>/dev/null || true\ntccutil reset AppleEvents com.gutchin.touchtool 2>/dev/null || true\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8F65FDE81A152909BC6B27C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CAABE3329FC3CA4FCD5B2688 /* Action.swift in Sources */,
+				A5DCAC912D1304E73F9958ED /* ActionExecutor.swift in Sources */,
+				D253B7A0E38D382E3DD92932 /* ActionListPanel.swift in Sources */,
+				603D6FCF4F48391C35B93546 /* AppDelegate.swift in Sources */,
+				A81D2DD39D9C38F691EA8061 /* AppSidebar.swift in Sources */,
+				19F61F782EE805CF7F5F3014 /* AppState.swift in Sources */,
+				4FCDFEF6108186D33C545E18 /* AppTarget.swift in Sources */,
+				E4D58A8D6926A8E4B601C460 /* ConfigurationPanel.swift in Sources */,
+				047BD176EA8475D2CB843670 /* GestureConsoleView.swift in Sources */,
+				8F56617241408E093C881A1A /* GestureLog.swift in Sources */,
+				E2128A12EA0C8CE46B2A4945 /* GutchinTouchToolApp.swift in Sources */,
+				BAB81AC773B591DF8C84716F /* KeyboardMonitor.swift in Sources */,
+				5CFF9E4308528010D641FB27 /* LogSidePanel.swift in Sources */,
+				C7665F020EFF44DD35CA065A /* MainWindow.swift in Sources */,
+				AF52A804BBFA16C53BA10949 /* Preset.swift in Sources */,
+				DBAE98A258656174646D15F7 /* PresetManager.swift in Sources */,
+				52C199558636E32D42A6EE0C /* TrackpadMonitor.swift in Sources */,
+				903BFC8E7D8AD82702A59CE0 /* Trigger.swift in Sources */,
+				55F610E7C9360B6C61D064E4 /* TriggerListPanel.swift in Sources */,
+				93A2106594D8B52D8E09F752 /* TriggerType.swift in Sources */,
+				5A8F422110A23E9ED97A3EF4 /* WindowManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD452D45B15EB6A721252A1D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				019B9C7BA352AFC84AD954BB /* TrackpadPipelineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		886A586431328C83DEAF817C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3C9FB7E272D97E99127B5FE4 /* GutchinTouchTool */;
+			targetProxy = 69C00980C0C1CC66807B6494 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		06887EC70AA27D5F97D072D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = GutchinTouchTool/GutchinTouchTool.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = GutchinTouchTool/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gutchin.touchtool;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		6A64594ECB3FA180413ABDBA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = GutchinTouchTool/GutchinTouchTool.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = GutchinTouchTool/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gutchin.touchtool;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		92C9FFDBB548536C1F4AC7F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		ADC617BD9239FE7A9E686265 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gutchin.GutchinTouchToolTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GutchinTouchTool.app/Contents/MacOS/GutchinTouchTool";
+			};
+			name = Release;
+		};
+		B2745171AF00365DFAECA0B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gutchin.GutchinTouchToolTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GutchinTouchTool.app/Contents/MacOS/GutchinTouchTool";
+			};
+			name = Debug;
+		};
+		D5F01A7D46AACCFAE30F836E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		072CB362C302F73CB9FD6B79 /* Build configuration list for PBXNativeTarget "GutchinTouchTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A64594ECB3FA180413ABDBA /* Debug */,
+				06887EC70AA27D5F97D072D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CD80ADFA1FB08E5067A2C837 /* Build configuration list for PBXProject "GutchinTouchTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5F01A7D46AACCFAE30F836E /* Debug */,
+				92C9FFDBB548536C1F4AC7F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EB0D880CD4A627E65A64823E /* Build configuration list for PBXNativeTarget "GutchinTouchToolTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B2745171AF00365DFAECA0B7 /* Debug */,
+				ADC617BD9239FE7A9E686265 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 953D4117B8782C04D3CD3591 /* Project object */;
+}
