@@ -1,0 +1,15 @@
+# Xcode
+build/
+DerivedData/
+*.xcworkspace
+xcuserdata/
+*.xcscmblueprint
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# Temporary files
+/tmp/
+*.log
