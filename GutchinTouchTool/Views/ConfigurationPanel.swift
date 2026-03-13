@@ -131,6 +131,13 @@ struct TriggerConfigView: View {
                 }
             }
 
+            // Gesture animation preview
+            if case .trackpadGesture(let gesture) = trigger.input {
+                GesturePreviewView(gesture: gesture)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 8)
+            }
+
             Spacer()
         }
     }
