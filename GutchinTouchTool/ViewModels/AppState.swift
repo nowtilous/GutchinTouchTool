@@ -48,6 +48,8 @@ class AppState: ObservableObject {
         self.selectedAppTarget = preset.appTargets.first ?? .allApps
         NSLog("[GTT] Loaded preset with %d triggers", preset.triggers.count)
         // Schedule monitor start for next runloop iteration (self must be fully initialized first)
+        // Skip automatic monitoring when running inside the unit-test host
+        guard NSClassFromString("XCTestCase") == nil else { return }
         DispatchQueue.main.async {
             self.startMonitoring()
         }

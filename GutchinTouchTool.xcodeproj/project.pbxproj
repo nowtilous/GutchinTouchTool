@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		019B9C7BA352AFC84AD954BB /* TrackpadPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1205874DEC0ED25A5E28FD /* TrackpadPipelineTests.swift */; };
+		AA1122334455667788990011 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1122334455667788990011 /* ModelTests.swift */; };
+		AA2233445566778899001122 /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2233445566778899001122 /* SerializationTests.swift */; };
+		AA3344556677889900112233 /* LiveTouchStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3344556677889900112233 /* LiveTouchStateTests.swift */; };
 		047BD176EA8475D2CB843670 /* GestureConsoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835804504535BFFF0A615239 /* GestureConsoleView.swift */; };
 		982231941044009309851310 /* GesturePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231238745317203595814545 /* GesturePreviewView.swift */; };
 		D1E2F3A4B5C60718293A4B5C /* LiveTouchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5C /* LiveTouchState.swift */; };
@@ -49,6 +52,9 @@
 		015C76C28717C9F0481DE62D /* GutchinTouchToolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GutchinTouchToolApp.swift; sourceTree = "<group>"; };
 		0583DD6C77ADF7E2D5EA71E7 /* TriggerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerType.swift; sourceTree = "<group>"; };
 		1C1205874DEC0ED25A5E28FD /* TrackpadPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadPipelineTests.swift; sourceTree = "<group>"; };
+		BB1122334455667788990011 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
+		BB2233445566778899001122 /* SerializationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializationTests.swift; sourceTree = "<group>"; };
+		BB3344556677889900112233 /* LiveTouchStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchStateTests.swift; sourceTree = "<group>"; };
 		26864A407E082224513C0272 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		33C98385A38C1DA1F1848DCE /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		38683DC37492332DC1942B49 /* Preset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preset.swift; sourceTree = "<group>"; };
@@ -183,6 +189,9 @@
 			isa = PBXGroup;
 			children = (
 				1C1205874DEC0ED25A5E28FD /* TrackpadPipelineTests.swift */,
+				BB1122334455667788990011 /* ModelTests.swift */,
+				BB2233445566778899001122 /* SerializationTests.swift */,
+				BB3344556677889900112233 /* LiveTouchStateTests.swift */,
 			);
 			path = GutchinTouchToolTests;
 			sourceTree = "<group>";
@@ -330,6 +339,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				019B9C7BA352AFC84AD954BB /* TrackpadPipelineTests.swift in Sources */,
+				AA1122334455667788990011 /* ModelTests.swift in Sources */,
+				AA2233445566778899001122 /* SerializationTests.swift in Sources */,
+				AA3344556677889900112233 /* LiveTouchStateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
