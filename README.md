@@ -6,7 +6,17 @@ Have fun.
 
 ![GutchinTouchTool Demo](assets/demo.gif)
 
-## Building
+## Install
+
+1. Download `GutchinTouchTool.dmg` from [Releases](https://github.com/nowtilous/GutchinTouchTool/releases)
+2. Open the DMG and drag `GutchinTouchTool.app` to Applications
+3. Run this in Terminal to bypass Gatekeeper (the app is not notarized):
+   ```
+   xattr -cr /Applications/GutchinTouchTool.app
+   ```
+4. Open the app
+
+## Building from source
 
 1. Clone the repo
 2. Open `GutchinTouchTool.xcodeproj` in Xcode
