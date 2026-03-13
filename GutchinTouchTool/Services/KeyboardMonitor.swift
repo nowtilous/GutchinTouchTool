@@ -132,7 +132,7 @@ class KeyboardMonitor: ObservableObject {
     private var globalMonitors: [Any] = []
     private var triggerEventTap: CFMachPort?
     private var triggerRunLoopSource: CFRunLoopSource?
-    private var registeredTriggers: [(shortcut: KeyboardShortcut, actions: [TriggerAction], appBundleID: String?)] = []
+    private var registeredTriggers: [(id: UUID, shortcut: KeyboardShortcut, actions: [TriggerAction], appBundleID: String?)] = []
 
     // Static reference for CGEventTap callback (C function can't capture self)
     private static var activeMonitor: KeyboardMonitor?
@@ -146,7 +146,7 @@ class KeyboardMonitor: ObservableObject {
 
         for trigger in keyboardTriggers {
             if case .keyboardShortcut(let shortcut) = trigger.input {
-                registeredTriggers.append((shortcut: shortcut, actions: trigger.actions, appBundleID: trigger.appBundleID))
+                registeredTriggers.append((id: trigger.id, shortcut: shortcut, actions: trigger.actions, appBundleID: trigger.appBundleID))
             }
         }
 
@@ -200,6 +200,8 @@ class KeyboardMonitor: ObservableObject {
                     DispatchQueue.main.async {
                         for trigger in toFire {
                             ActionExecutor.executeActions(trigger.actions)
+                            LiveTouchState.shared.flashTrigger(trigger.id)
+                            NotificationCenter.default.post(name: .gestureDidFire, object: nil, userInfo: ["name": trigger.shortcut.displayString])
                         }
                     }
                     return nil // swallow the key event
@@ -247,6 +249,8 @@ class KeyboardMonitor: ObservableObject {
         let toFire = appSpecific.isEmpty ? global : appSpecific
         for trigger in toFire {
             ActionExecutor.executeActions(trigger.actions)
+            LiveTouchState.shared.flashTrigger(trigger.id)
+            NotificationCenter.default.post(name: .gestureDidFire, object: nil, userInfo: ["name": trigger.shortcut.displayString])
         }
     }
 

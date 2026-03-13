@@ -191,12 +191,18 @@ struct TriggerCategoryTabBar: View {
 
 struct TriggerRow: View {
     let trigger: Trigger
+    @ObservedObject private var liveState = LiveTouchState.shared
+
+    private var isFlashing: Bool {
+        liveState.lastFiredTriggerID == trigger.id
+    }
 
     var body: some View {
         HStack(spacing: 8) {
             Circle()
-                .fill(trigger.isEnabled ? Color.green : Color.gray)
+                .fill(isFlashing ? Color.green : (trigger.isEnabled ? Color.green : Color.gray))
                 .frame(width: 8, height: 8)
+                .scaleEffect(isFlashing ? 1.8 : 1.0)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(trigger.displayName)
@@ -215,6 +221,11 @@ struct TriggerRow: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
         .opacity(trigger.isEnabled ? 1 : 0.5)
+        .background(
+            RoundedRectangle(cornerRadius: 4)
+                .fill(Color.green.opacity(isFlashing ? 0.15 : 0))
+        )
+        .animation(.easeOut(duration: 0.3), value: isFlashing)
     }
 }
 
@@ -278,6 +289,19 @@ struct AddTriggerSheet: View {
         }
     }
 
+    private func gestureIcon(_ gesture: TrackpadGesture) -> String {
+        let name = gesture.rawValue.lowercased()
+        if name.contains("swipe") { return "hand.draw" }
+        if name.contains("pinch") { return "arrow.up.left.and.arrow.down.right" }
+        if name.contains("rotate") { return "arrow.triangle.2.circlepath" }
+        if name.contains("tap") || name.contains("click") { return "hand.tap" }
+        if name.contains("tiptap") { return "hand.point.up.left.and.text" }
+        if name.contains("circle") { return "circle.dashed" }
+        if name.contains("corner") { return "square.topright" }
+        if name.contains("middle click") { return "rectangle.center.inset.filled" }
+        return "hand.point.up"
+    }
+
     private var filteredGestures: [TrackpadGesture] {
         if gestureSearch.isEmpty { return TrackpadGesture.allCases.map { $0 } }
         return TrackpadGesture.allCases.filter { $0.rawValue.localizedCaseInsensitiveContains(gestureSearch) }
@@ -295,26 +319,40 @@ struct AddTriggerSheet: View {
                         ForEach(filteredGestures) { gesture in
                             let selected = selectedGesture == gesture
                             HStack {
+                                Image(systemName: gestureIcon(gesture))
+                                    .frame(width: 20)
+                                    .foregroundColor(selected ? .white : .accentColor)
                                 Text(gesture.rawValue)
                                     .foregroundColor(selected ? .white : .primary)
                                 Spacer()
                                 if selected {
-                                    Image(systemName: "checkmark")
+                                    Image(systemName: "checkmark.circle.fill")
                                         .foregroundColor(.white)
-                                        .font(.caption)
+                                        .font(.system(size: 14))
+                                        .transition(.scale.combined(with: .opacity))
                                 }
                             }
                             .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
+                            .padding(.vertical, 7)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(selected ? Color.accentColor : Color.clear)
-                            .cornerRadius(4)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(selected ? Color.accentColor : Color.clear)
+                            )
+                            .scaleEffect(selected ? 1.02 : 1.0)
                             .contentShape(Rectangle())
                             .onTapGesture(count: 2) {
-                                selectedGesture = gesture
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                    selectedGesture = gesture
+                                }
                                 addTrigger()
                             }
-                            .onTapGesture { selectedGesture = gesture }
+                            .onTapGesture {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                    selectedGesture = gesture
+                                }
+                            }
+                            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selected)
                             .id(gesture)
                         }
                     }
@@ -465,22 +503,34 @@ struct EditTriggerSheet: View {
                     ForEach(TrackpadGesture.allCases) { gesture in
                         let selected = selectedGesture == gesture
                         HStack {
+                            Image(systemName: gestureIconForEdit(gesture))
+                                .frame(width: 20)
+                                .foregroundColor(selected ? .white : .accentColor)
                             Text(gesture.rawValue)
                                 .foregroundColor(selected ? .white : .primary)
                             Spacer()
                             if selected {
-                                Image(systemName: "checkmark")
+                                Image(systemName: "checkmark.circle.fill")
                                     .foregroundColor(.white)
-                                    .font(.caption)
+                                    .font(.system(size: 14))
+                                    .transition(.scale.combined(with: .opacity))
                             }
                         }
                         .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
+                        .padding(.vertical, 7)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(selected ? Color.accentColor : Color.clear)
-                        .cornerRadius(4)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(selected ? Color.accentColor : Color.clear)
+                        )
+                        .scaleEffect(selected ? 1.02 : 1.0)
                         .contentShape(Rectangle())
-                        .onTapGesture { selectedGesture = gesture }
+                        .onTapGesture {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                selectedGesture = gesture
+                            }
+                        }
+                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selected)
                     }
                 }
                 .padding(4)
@@ -500,6 +550,19 @@ struct EditTriggerSheet: View {
             Text("Cannot change this input type here")
                 .foregroundColor(.secondary)
         }
+    }
+
+    private func gestureIconForEdit(_ gesture: TrackpadGesture) -> String {
+        let name = gesture.rawValue.lowercased()
+        if name.contains("swipe") { return "hand.draw" }
+        if name.contains("pinch") { return "arrow.up.left.and.arrow.down.right" }
+        if name.contains("rotate") { return "arrow.triangle.2.circlepath" }
+        if name.contains("tap") || name.contains("click") { return "hand.tap" }
+        if name.contains("tiptap") { return "hand.point.up.left.and.text" }
+        if name.contains("circle") { return "circle.dashed" }
+        if name.contains("corner") { return "square.topright" }
+        if name.contains("middle click") { return "rectangle.center.inset.filled" }
+        return "hand.point.up"
     }
 
     private func saveTrigger() {
