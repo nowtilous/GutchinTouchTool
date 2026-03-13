@@ -128,7 +128,10 @@ class TrackpadMonitor {
     private var tipTapPending = false         // we saw 1→2 with a valid rest, waiting for 2→1 or 2→0→1
     private var tipTapPendingTime: Date?      // when the 2-finger phase started (for timeout)
     private let tipTapMaxTapDuration: TimeInterval = 0.35 // max time the tapping finger can be down
-    private let tipTapMinRestTime: TimeInterval = 0.12    // min time resting finger must be down before tap
+    private var tipTapMinRestTime: TimeInterval {
+        let stored = UserDefaults.standard.double(forKey: "GTTTipTapMinRestTime")
+        return stored > 0 ? stored : 0.12
+    }
     private var lastTipTapFiredTime: Date?                // cooldown: prevent false fires when switching sides
     private let tipTapCooldown: TimeInterval = 0.25       // min time between consecutive TipTap fires
 

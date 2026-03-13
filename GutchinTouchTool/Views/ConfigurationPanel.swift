@@ -55,6 +55,7 @@ struct TriggerConfigView: View {
     @State private var name: String
     @State private var isEnabled: Bool
     @AppStorage("GTTPressDragThreshold") private var pressDragThreshold: Double = 300
+    @AppStorage("GTTTipTapMinRestTime") private var tipTapMinRestTime: Double = 0.12
 
     init(trigger: Trigger) {
         self.trigger = trigger
@@ -137,6 +138,33 @@ struct TriggerConfigView: View {
                 GesturePreviewView(gesture: gesture)
                     .frame(maxWidth: .infinity)
                     .padding(.top, 8)
+
+                // TipTap sensitivity slider
+                if gesture == .tipTapLeft || gesture == .tipTapRight || gesture == .tipTapMiddle {
+                    GroupBox("TipTap Sensitivity") {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Min. rest time:")
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(Int(tipTapMinRestTime * 1000)) ms")
+                                    .font(.system(.body, design: .monospaced))
+                                    .foregroundColor(.accentColor)
+                            }
+                            Slider(value: $tipTapMinRestTime, in: 0.02...0.4, step: 0.01)
+                            HStack {
+                                Text("Sensitive")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("Fewer false positives")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(8)
+                    }
+                }
 
                 // Press-drag sensitivity slider
                 if gesture == .twoFingerPressDragLeft || gesture == .twoFingerPressDragRight {
