@@ -95,6 +95,10 @@ class TrackpadMonitor {
     private var scrollFingerCount: Int = 0
     private let swipeThreshold: CGFloat = 50
 
+    // Press-drag tracking
+    private var pressDragDeltaX: CGFloat = 0
+    private var pressDragActive = false
+
     // Pinch/rotate tracking
     private var magnification: CGFloat = 0
     private var rotation: CGFloat = 0
@@ -727,13 +731,19 @@ class TrackpadMonitor {
         let scrollHandler: (NSEvent) -> Void = { [weak self] e in self?.handleScroll(e) }
         let magnifyHandler: (NSEvent) -> Void = { [weak self] e in self?.handleMagnify(e) }
         let rotateHandler: (NSEvent) -> Void = { [weak self] e in self?.handleRotate(e) }
+            let dragHandler: (NSEvent) -> Void = { [weak self] e in self?.handleDrag(e) }
         // Left-click press: used for gesture logic (circle, position click)
         // Visual press state is handled in the multitouch callback via NSEvent.pressedMouseButtons
         let leftPressHandler: (NSEvent) -> Void = { [weak self] _ in
             self?.trackpadIsPressed = true
+            if (self?.currentFingers ?? 0) >= 2 {
+                self?.pressDragDeltaX = 0
+                self?.pressDragActive = true
+            }
             self?.handlePositionClick()
         }
         let leftReleaseHandler: (NSEvent) -> Void = { [weak self] _ in
+            self?.handlePressDragEnd()
             self?.trackpadIsPressed = false
             self?.positionClickFired = false
             self?.resetCircleState()
@@ -770,6 +780,50 @@ class TrackpadMonitor {
         if let m = NSEvent.addLocalMonitorForEvents(matching: .leftMouseUp, handler: { e in leftReleaseHandler(e); return e }) {
             monitors.append(m)
         }
+        if let m = NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDragged, handler: dragHandler) {
+            monitors.append(m)
+        }
+        if let m = NSEvent.addLocalMonitorForEvents(matching: .leftMouseDragged, handler: { e in dragHandler(e); return e }) {
+            monitors.append(m)
+        }
+        // Right mouse — 2-finger click on trackpad is a right-click by default
+        if let m = NSEvent.addGlobalMonitorForEvents(matching: .rightMouseDown, handler: leftPressHandler) {
+            monitors.append(m)
+        }
+        if let m = NSEvent.addLocalMonitorForEvents(matching: .rightMouseDown, handler: { e in leftPressHandler(e); return e }) {
+            monitors.append(m)
+        }
+        if let m = NSEvent.addGlobalMonitorForEvents(matching: .rightMouseUp, handler: leftReleaseHandler) {
+            monitors.append(m)
+        }
+        if let m = NSEvent.addLocalMonitorForEvents(matching: .rightMouseUp, handler: { e in leftReleaseHandler(e); return e }) {
+            monitors.append(m)
+        }
+        if let m = NSEvent.addGlobalMonitorForEvents(matching: .rightMouseDragged, handler: dragHandler) {
+            monitors.append(m)
+        }
+        if let m = NSEvent.addLocalMonitorForEvents(matching: .rightMouseDragged, handler: { e in dragHandler(e); return e }) {
+            monitors.append(m)
+        }
+    }
+
+    // MARK: - Press-drag handling
+
+    private func handleDrag(_ event: NSEvent) {
+        guard currentFingers == 2 else { return }
+        pressDragDeltaX += event.deltaX
+    }
+
+    private func handlePressDragEnd() {
+        guard pressDragActive && currentFingers == 2 else {
+            pressDragDeltaX = 0; pressDragActive = false; return
+        }
+        let threshold: CGFloat = 30
+        if abs(pressDragDeltaX) > threshold {
+            let gesture: TrackpadGesture = pressDragDeltaX > 0 ? .twoFingerPressDragRight : .twoFingerPressDragLeft
+            fireGesture(gesture)
+        }
+        pressDragDeltaX = 0; pressDragActive = false
     }
 
     // MARK: - Scroll / Swipe handling
@@ -885,6 +939,11 @@ class TrackpadMonitor {
                 NotificationCenter.default.post(name: .gestureDidFire, object: nil, userInfo: ["name": gesture.rawValue])
             }
         }
+    }
+
+    /// Test-only: directly fire a gesture through the normal pipeline
+    func fireGestureForTest(_ gesture: TrackpadGesture) {
+        fireGesture(gesture)
     }
 
     func unregisterAll() {

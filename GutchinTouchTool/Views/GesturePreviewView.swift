@@ -145,6 +145,12 @@ struct GesturePreviewView: View {
             PositionClickAnimation(position: .middleTop, animating: animating)
         case .middleClickBottom:
             PositionClickAnimation(position: .middleBottom, animating: animating)
+
+        // Press-drag
+        case .twoFingerPressDragLeft:
+            SwipeAnimation(fingerCount: 2, direction: .left, animating: animating)
+        case .twoFingerPressDragRight:
+            SwipeAnimation(fingerCount: 2, direction: .right, animating: animating)
         }
     }
 }

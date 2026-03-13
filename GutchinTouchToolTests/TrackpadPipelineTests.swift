@@ -356,4 +356,81 @@ final class TrackpadPipelineTests: XCTestCase {
         waitForExpectations(timeout: 2.0)
         monitor.unregisterAll()
     }
+
+    // MARK: - Two-finger press-drag tests
+
+    func testTwoFingerPressDragLeftTriggersAction() {
+        let expectation = expectation(description: "Press drag left fires")
+
+        var trigger = Trigger(name: "Drag Left", input: .trackpadGesture(.twoFingerPressDragLeft))
+        trigger.actions = [TriggerAction(actionType: .snapWindowLeft)]
+
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        var firedAction: TriggerAction?
+        ActionExecutor.onActionExecuted = { a in
+            firedAction = a
+            expectation.fulfill()
+        }
+
+        monitor.fireGestureForTest(.twoFingerPressDragLeft)
+
+        waitForExpectations(timeout: 2.0)
+        XCTAssertEqual(firedAction?.actionType, .snapWindowLeft)
+        monitor.unregisterAll()
+    }
+
+    func testTwoFingerPressDragRightTriggersAction() {
+        let expectation = expectation(description: "Press drag right fires")
+
+        var trigger = Trigger(name: "Drag Right", input: .trackpadGesture(.twoFingerPressDragRight))
+        trigger.actions = [TriggerAction(actionType: .snapWindowRight)]
+
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        var firedAction: TriggerAction?
+        ActionExecutor.onActionExecuted = { a in
+            firedAction = a
+            expectation.fulfill()
+        }
+
+        monitor.fireGestureForTest(.twoFingerPressDragRight)
+
+        waitForExpectations(timeout: 2.0)
+        XCTAssertEqual(firedAction?.actionType, .snapWindowRight)
+        monitor.unregisterAll()
+    }
+
+    func testPressDragLeftDoesNotFireDragRight() {
+        let expectation = expectation(description: "Should NOT fire")
+        expectation.isInverted = true
+
+        var trigger = Trigger(name: "Right Only", input: .trackpadGesture(.twoFingerPressDragRight))
+        trigger.actions = [TriggerAction(actionType: .sendKeyStroke)]
+
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        ActionExecutor.onActionExecuted = { _ in expectation.fulfill() }
+
+        monitor.fireGestureForTest(.twoFingerPressDragLeft)
+
+        waitForExpectations(timeout: 1.0)
+        monitor.unregisterAll()
+    }
+
+    func testPressDragGesturesCodable() throws {
+        for gesture in [TrackpadGesture.twoFingerPressDragLeft, .twoFingerPressDragRight] {
+            let trigger = Trigger(name: gesture.rawValue, input: .trackpadGesture(gesture))
+            let data = try JSONEncoder().encode(trigger)
+            let decoded = try JSONDecoder().decode(Trigger.self, from: data)
+            if case .trackpadGesture(let g) = decoded.input {
+                XCTAssertEqual(g, gesture)
+            } else {
+                XCTFail("Expected trackpadGesture for \(gesture)")
+            }
+        }
+    }
 }

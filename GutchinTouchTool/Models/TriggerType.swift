@@ -33,6 +33,8 @@ enum TrackpadGesture: String, CaseIterable, Identifiable, Codable {
     case twoFingerTap = "2 Finger Tap"
     case twoFingerDoubleTap = "2 Finger Double Tap"
     case twoFingerClick = "2 Finger Click"
+    case twoFingerPressDragLeft = "2 Finger Press Drag Left"
+    case twoFingerPressDragRight = "2 Finger Press Drag Right"
 
     // 3-finger gestures
     case threeFingerSwipeUp = "3 Finger Swipe Up"
