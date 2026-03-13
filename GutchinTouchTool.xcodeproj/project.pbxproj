@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		019B9C7BA352AFC84AD954BB /* TrackpadPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1205874DEC0ED25A5E28FD /* TrackpadPipelineTests.swift */; };
 		047BD176EA8475D2CB843670 /* GestureConsoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835804504535BFFF0A615239 /* GestureConsoleView.swift */; };
+		982231941044009309851310 /* GesturePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231238745317203595814545 /* GesturePreviewView.swift */; };
+		D1E2F3A4B5C60718293A4B5C /* LiveTouchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5C /* LiveTouchState.swift */; };
+		E1F2A3B4C5D60718293A4B5C /* LiveTouchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B5C /* LiveTouchView.swift */; };
 		19F61F782EE805CF7F5F3014 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1C96664AFA27E00FA324A5 /* AppState.swift */; };
 		4FCDFEF6108186D33C545E18 /* AppTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86395DA53EC150134A65426C /* AppTarget.swift */; };
 		52C199558636E32D42A6EE0C /* TrackpadMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9277918E0700B4DF497CC63A /* TrackpadMonitor.swift */; };
@@ -56,10 +59,13 @@
 		506189193F0CED5175427042 /* AppSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSidebar.swift; sourceTree = "<group>"; };
 		52DC958E2E845E35D6977C14 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		591388447B863AB1271B38FE /* GestureLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureLog.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B5C /* LiveTouchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchState.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4B5C /* LiveTouchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchView.swift; sourceTree = "<group>"; };
 		5E1C96664AFA27E00FA324A5 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		70C26620895E16B05C76A98E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7DC1E20528882B20DA9398F5 /* PresetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetManager.swift; sourceTree = "<group>"; };
 		835804504535BFFF0A615239 /* GestureConsoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureConsoleView.swift; sourceTree = "<group>"; };
+		231238745317203595814545 /* GesturePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturePreviewView.swift; sourceTree = "<group>"; };
 		86395DA53EC150134A65426C /* AppTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTarget.swift; sourceTree = "<group>"; };
 		9277918E0700B4DF497CC63A /* TrackpadMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadMonitor.swift; sourceTree = "<group>"; };
 		95AF6CD7F63515AC7907609D /* ConfigurationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPanel.swift; sourceTree = "<group>"; };
@@ -79,6 +85,7 @@
 				3DB054EA1A8A7A5690A40B7D /* ActionExecutor.swift */,
 				591388447B863AB1271B38FE /* GestureLog.swift */,
 				A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */,
+				A1B2C3D4E5F60718293A4B5C /* LiveTouchState.swift */,
 				7DC1E20528882B20DA9398F5 /* PresetManager.swift */,
 				9277918E0700B4DF497CC63A /* TrackpadMonitor.swift */,
 				A1F07B761A4890A129778071 /* WindowManager.swift */,
@@ -93,6 +100,8 @@
 				506189193F0CED5175427042 /* AppSidebar.swift */,
 				95AF6CD7F63515AC7907609D /* ConfigurationPanel.swift */,
 				835804504535BFFF0A615239 /* GestureConsoleView.swift */,
+				231238745317203595814545 /* GesturePreviewView.swift */,
+				F1A2B3C4D5E60718293A4B5C /* LiveTouchView.swift */,
 				455785A555FBE4C61B590D01 /* LogSidePanel.swift */,
 				52DC958E2E845E35D6977C14 /* MainWindow.swift */,
 				3F9AA128B0872E58AF518488 /* TriggerListPanel.swift */,
@@ -298,7 +307,10 @@
 				4FCDFEF6108186D33C545E18 /* AppTarget.swift in Sources */,
 				E4D58A8D6926A8E4B601C460 /* ConfigurationPanel.swift in Sources */,
 				047BD176EA8475D2CB843670 /* GestureConsoleView.swift in Sources */,
+				982231941044009309851310 /* GesturePreviewView.swift in Sources */,
 				8F56617241408E093C881A1A /* GestureLog.swift in Sources */,
+				D1E2F3A4B5C60718293A4B5C /* LiveTouchState.swift in Sources */,
+				E1F2A3B4C5D60718293A4B5C /* LiveTouchView.swift in Sources */,
 				E2128A12EA0C8CE46B2A4945 /* GutchinTouchToolApp.swift in Sources */,
 				BAB81AC773B591DF8C84716F /* KeyboardMonitor.swift in Sources */,
 				5CFF9E4308528010D641FB27 /* LogSidePanel.swift in Sources */,
