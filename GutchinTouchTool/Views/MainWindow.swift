@@ -5,6 +5,9 @@ struct MainWindow: View {
     @ObservedObject private var gestureLog = GestureLog.shared
     @State private var showLog = true
     @State private var showTouchVisualizer = true
+    @AppStorage("GTTAppearance") private var appearance: String = "dark"
+
+    private var isDark: Bool { appearance == "dark" }
 
     var body: some View {
         HStack(spacing: 0) {
@@ -79,8 +82,17 @@ struct MainWindow: View {
                 Button(action: { importPreset() }) {
                     Label("Import", systemImage: "square.and.arrow.down")
                 }
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        appearance = isDark ? "light" : "dark"
+                    }
+                }) {
+                    Label("Appearance", systemImage: isDark ? "moon.fill" : "sun.max.fill")
+                        .foregroundStyle(isDark ? .indigo : .yellow)
+                }
             }
         }
+        .preferredColorScheme(appearance == "system" ? nil : (isDark ? .dark : .light))
     }
 
     private func exportPreset() {
