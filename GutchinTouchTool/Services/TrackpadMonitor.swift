@@ -858,6 +858,9 @@ class TrackpadMonitor {
     private func fireGesture(_ gesture: TrackpadGesture) {
         NSLog("[TrackpadMonitor] Firing gesture: %@", gesture.rawValue)
 
+        // Record every detected gesture for statistics
+        GestureStatistics.shared.recordDetectionFromAnyThread(gesture.rawValue)
+
         // Get the frontmost app's bundle ID
         let frontBundleID = NSWorkspace.shared.frontmostApplication?.bundleIdentifier
 
@@ -876,6 +879,7 @@ class TrackpadMonitor {
                 let actionNames = trigger.actions.map { $0.actionType.rawValue }.joined(separator: ", ")
                 let scope = trigger.appBundleID != nil ? "app-specific" : "global"
                 GestureLog.shared.logFromAnyThread("Fired: \(gesture.rawValue) → \(actionNames) (\(scope))", level: .fire)
+                GestureStatistics.shared.recordFireFromAnyThread(gesture.rawValue)
                 ActionExecutor.executeActions(trigger.actions)
                 LiveTouchState.shared.flashTrigger(trigger.id)
                 NotificationCenter.default.post(name: .gestureDidFire, object: nil, userInfo: ["name": gesture.rawValue])

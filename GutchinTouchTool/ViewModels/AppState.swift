@@ -30,6 +30,7 @@ class AppState: ObservableObject {
     @Published var showingAddTrigger: Bool = false
     @Published var showingAddAction: Bool = false
     @Published var showingAddApp: Bool = false
+    @Published var showStatistics: Bool = false
     @Published var accentColorChoice: AccentColorChoice = {
         if let raw = UserDefaults.standard.string(forKey: "GTTAccentColor"),
            let choice = AccentColorChoice(rawValue: raw) {

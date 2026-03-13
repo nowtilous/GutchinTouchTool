@@ -37,6 +37,7 @@ struct AppSidebar: View {
                         appState.selectedAppTarget = app
                         appState.selectedTrigger = nil
                         appState.selectedAction = nil
+                        appState.showStatistics = false
                     }
                 }
             )) {
@@ -53,6 +54,42 @@ struct AppSidebar: View {
                 }
             }
             .listStyle(.sidebar)
+
+            Divider()
+
+            // Statistics Button
+            Button(action: {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    appState.showStatistics.toggle()
+                }
+            }) {
+                HStack(spacing: 8) {
+                    Image(systemName: "chart.bar.fill")
+                        .foregroundStyle(
+                            .linearGradient(
+                                colors: [.blue, .purple, .pink, .orange],
+                                startPoint: .bottomLeading,
+                                endPoint: .topTrailing
+                            )
+                        )
+                    Text("Statistics")
+                        .foregroundColor(appState.showStatistics ? .primary : .secondary)
+                    Spacer()
+                    if appState.showStatistics {
+                        Image(systemName: "chevron.right")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .contentShape(Rectangle())
+                .background(appState.showStatistics ? appState.accentColorChoice.color.opacity(0.15) : Color.clear)
+                .cornerRadius(6)
+            }
+            .buttonStyle(.plain)
+            .padding(.horizontal, 6)
+            .padding(.top, 6)
 
             Divider()
 
