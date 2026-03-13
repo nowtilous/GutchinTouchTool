@@ -1,0 +1,80 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  model-tests:
+    name: Model Tests
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+      - name: Run Model Tests
+        run: |
+          xcodebuild test \
+            -scheme GutchinTouchTool \
+            -destination 'platform=macOS' \
+            -only-testing:GutchinTouchToolTests/ModelTests \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+  serialization-tests:
+    name: Serialization Tests
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+      - name: Run Serialization Tests
+        run: |
+          xcodebuild test \
+            -scheme GutchinTouchTool \
+            -destination 'platform=macOS' \
+            -only-testing:GutchinTouchToolTests/SerializationTests \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+  live-touch-state-tests:
+    name: Live Touch State Tests
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+      - name: Run Live Touch State Tests
+        run: |
+          xcodebuild test \
+            -scheme GutchinTouchTool \
+            -destination 'platform=macOS' \
+            -only-testing:GutchinTouchToolTests/LiveTouchStateTests \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+  trackpad-pipeline-tests:
+    name: Trackpad Pipeline Tests
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+      - name: Run Trackpad Pipeline Tests
+        run: |
+          xcodebuild test \
+            -scheme GutchinTouchTool \
+            -destination 'platform=macOS' \
+            -only-testing:GutchinTouchToolTests/TrackpadPipelineTests \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
