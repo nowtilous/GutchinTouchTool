@@ -284,6 +284,10 @@ class TrackpadMonitor {
                 lastSingleFingerPos = nil
             }
         }
+        // Update visual press state from real-time button query every frame
+        // This is authoritative — avoids stale state from mismatched down/up events
+        let anyButtonDown = NSEvent.pressedMouseButtons != 0
+        LiveTouchState.shared.setPressed(anyButtonDown && !liveTouchPoints.isEmpty)
         LiveTouchState.shared.update(liveTouchPoints)
 
         let previousFingers = currentFingers
@@ -723,24 +727,16 @@ class TrackpadMonitor {
         let scrollHandler: (NSEvent) -> Void = { [weak self] e in self?.handleScroll(e) }
         let magnifyHandler: (NSEvent) -> Void = { [weak self] e in self?.handleMagnify(e) }
         let rotateHandler: (NSEvent) -> Void = { [weak self] e in self?.handleRotate(e) }
-        // Left-click press: used for gesture logic (circle, position click) AND visual
+        // Left-click press: used for gesture logic (circle, position click)
+        // Visual press state is handled in the multitouch callback via NSEvent.pressedMouseButtons
         let leftPressHandler: (NSEvent) -> Void = { [weak self] _ in
             self?.trackpadIsPressed = true
             self?.handlePositionClick()
-            LiveTouchState.shared.setPressed(true)
         }
         let leftReleaseHandler: (NSEvent) -> Void = { [weak self] _ in
             self?.trackpadIsPressed = false
             self?.positionClickFired = false
             self?.resetCircleState()
-            LiveTouchState.shared.setPressed(false)
-        }
-        // Right/other click: visual press indicator only (don't affect trackpadIsPressed/circle)
-        let visualPressHandler: (NSEvent) -> Void = { _ in
-            LiveTouchState.shared.setPressed(true)
-        }
-        let visualReleaseHandler: (NSEvent) -> Void = { _ in
-            LiveTouchState.shared.setPressed(false)
         }
 
         if let m = NSEvent.addGlobalMonitorForEvents(matching: .scrollWheel, handler: scrollHandler) {
@@ -773,25 +769,6 @@ class TrackpadMonitor {
         }
         if let m = NSEvent.addLocalMonitorForEvents(matching: .leftMouseUp, handler: { e in leftReleaseHandler(e); return e }) {
             monitors.append(m)
-        }
-        // Right + other mouse — visual press only
-        for eventType in [NSEvent.EventType.rightMouseDown, NSEvent.EventType.otherMouseDown] {
-            let mask = NSEvent.EventTypeMask(rawValue: 1 << eventType.rawValue)
-            if let m = NSEvent.addGlobalMonitorForEvents(matching: mask, handler: visualPressHandler) {
-                monitors.append(m)
-            }
-            if let m = NSEvent.addLocalMonitorForEvents(matching: mask, handler: { e in visualPressHandler(e); return e }) {
-                monitors.append(m)
-            }
-        }
-        for eventType in [NSEvent.EventType.rightMouseUp, NSEvent.EventType.otherMouseUp] {
-            let mask = NSEvent.EventTypeMask(rawValue: 1 << eventType.rawValue)
-            if let m = NSEvent.addGlobalMonitorForEvents(matching: mask, handler: visualReleaseHandler) {
-                monitors.append(m)
-            }
-            if let m = NSEvent.addLocalMonitorForEvents(matching: mask, handler: { e in visualReleaseHandler(e); return e }) {
-                monitors.append(m)
-            }
         }
     }
 
