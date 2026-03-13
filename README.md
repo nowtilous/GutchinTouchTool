@@ -4,7 +4,7 @@ Have fun.
 
 ## Demo
 
-<video src="assets/Screen%20Recording%202026-03-13%20at%2011.29.52.mov" controls width="100%"></video>
+https://github.com/nowtilous/GutchinTouchTool/releases/download/v0.1.0/demo.mov
 
 ## Building
 
