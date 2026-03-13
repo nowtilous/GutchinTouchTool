@@ -197,14 +197,17 @@ class KeyboardMonitor: ObservableObject {
                 let toFire = appSpecific.isEmpty ? global : appSpecific
 
                 if !toFire.isEmpty {
-                    DispatchQueue.main.async {
-                        for trigger in toFire {
-                            ActionExecutor.executeActions(trigger.actions)
-                            LiveTouchState.shared.flashTrigger(trigger.id)
-                            NotificationCenter.default.post(name: .gestureDidFire, object: nil, userInfo: ["name": trigger.shortcut.displayString])
+                    let globalEnabled = UserDefaults.standard.object(forKey: "GTTGlobalEnabled") as? Bool ?? true
+                    if globalEnabled {
+                        DispatchQueue.main.async {
+                            for trigger in toFire {
+                                ActionExecutor.executeActions(trigger.actions)
+                                LiveTouchState.shared.flashTrigger(trigger.id)
+                                NotificationCenter.default.post(name: .gestureDidFire, object: nil, userInfo: ["name": trigger.shortcut.displayString])
+                            }
                         }
+                        return nil // swallow the key event
                     }
-                    return nil // swallow the key event
                 }
             }
 
@@ -247,6 +250,8 @@ class KeyboardMonitor: ObservableObject {
         let global = matching.filter { $0.appBundleID == nil }
 
         let toFire = appSpecific.isEmpty ? global : appSpecific
+        let globalEnabled = UserDefaults.standard.object(forKey: "GTTGlobalEnabled") as? Bool ?? true
+        guard globalEnabled else { return }
         for trigger in toFire {
             ActionExecutor.executeActions(trigger.actions)
             LiveTouchState.shared.flashTrigger(trigger.id)

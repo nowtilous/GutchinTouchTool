@@ -68,6 +68,28 @@ struct MainWindow: View {
         .background(Color(nsColor: .windowBackgroundColor))
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        appState.toggleGlobalEnabled()
+                    }
+                }) {
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(appState.globalEnabled ? Color.green : Color.red)
+                            .frame(width: 8, height: 8)
+                        Text(appState.globalEnabled ? "ON" : "OFF")
+                            .font(.system(size: 11, weight: .bold, design: .monospaced))
+                            .foregroundStyle(appState.globalEnabled ? .green : .red)
+                    }
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill((appState.globalEnabled ? Color.green : Color.red).opacity(0.12))
+                    )
+                }
+                .help(appState.globalEnabled ? "Disable all gestures" : "Enable all gestures")
+
                 Button(action: { withAnimation { showTouchVisualizer.toggle() } }) {
                     Label("Touch Viz", systemImage: "hand.point.up.braille.fill")
                         .foregroundStyle(showTouchVisualizer ? .cyan : .secondary)

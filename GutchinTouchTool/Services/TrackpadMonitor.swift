@@ -914,10 +914,17 @@ class TrackpadMonitor {
     // MARK: - Fire
 
     private func fireGesture(_ gesture: TrackpadGesture) {
-        NSLog("[TrackpadMonitor] Firing gesture: %@", gesture.rawValue)
+        NSLog("[TrackpadMonitor] Detected gesture: %@", gesture.rawValue)
 
-        // Record every detected gesture for statistics
+        // Record every detected gesture for statistics (always, even when paused)
         GestureStatistics.shared.recordDetectionFromAnyThread(gesture.rawValue)
+
+        // Check global toggle — detect but don't fire when disabled
+        let globalEnabled = UserDefaults.standard.object(forKey: "GTTGlobalEnabled") as? Bool ?? true
+        guard globalEnabled else {
+            GestureLog.shared.logFromAnyThread("Gesture \(gesture.rawValue) — paused", level: .noMatch)
+            return
+        }
 
         // Get the frontmost app's bundle ID
         let frontBundleID = NSWorkspace.shared.frontmostApplication?.bundleIdentifier
