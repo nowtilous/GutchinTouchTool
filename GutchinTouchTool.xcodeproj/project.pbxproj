@@ -11,6 +11,7 @@
 		AA1122334455667788990011 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1122334455667788990011 /* ModelTests.swift */; };
 		AA2233445566778899001122 /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2233445566778899001122 /* SerializationTests.swift */; };
 		AA3344556677889900112233 /* LiveTouchStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3344556677889900112233 /* LiveTouchStateTests.swift */; };
+		AA4455667788990011223344 /* GestureStatisticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4455667788990011223344 /* GestureStatisticsTests.swift */; };
 		047BD176EA8475D2CB843670 /* GestureConsoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835804504535BFFF0A615239 /* GestureConsoleView.swift */; };
 		982231941044009309851310 /* GesturePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231238745317203595814545 /* GesturePreviewView.swift */; };
 		D1E2F3A4B5C60718293A4B5C /* LiveTouchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5C /* LiveTouchState.swift */; };
@@ -35,6 +36,8 @@
 		D253B7A0E38D382E3DD92932 /* ActionListPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AF0ADA1620D8A2021D60F5 /* ActionListPanel.swift */; };
 		DBAE98A258656174646D15F7 /* PresetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC1E20528882B20DA9398F5 /* PresetManager.swift */; };
 		E2128A12EA0C8CE46B2A4945 /* GutchinTouchToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015C76C28717C9F0481DE62D /* GutchinTouchToolApp.swift */; };
+		CC1122334455667788990011 /* GestureStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1122334455667788990011 /* GestureStatistics.swift */; };
+		CC2233445566778899001122 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2233445566778899001122 /* StatisticsView.swift */; };
 		E4D58A8D6926A8E4B601C460 /* ConfigurationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AF6CD7F63515AC7907609D /* ConfigurationPanel.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +58,7 @@
 		BB1122334455667788990011 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 		BB2233445566778899001122 /* SerializationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializationTests.swift; sourceTree = "<group>"; };
 		BB3344556677889900112233 /* LiveTouchStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchStateTests.swift; sourceTree = "<group>"; };
+		BB4455667788990011223344 /* GestureStatisticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureStatisticsTests.swift; sourceTree = "<group>"; };
 		26864A407E082224513C0272 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		33C98385A38C1DA1F1848DCE /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		38683DC37492332DC1942B49 /* Preset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preset.swift; sourceTree = "<group>"; };
@@ -81,6 +85,8 @@
 		BE0D11D3DF027F5FA85DFF70 /* GutchinTouchTool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GutchinTouchTool.entitlements; sourceTree = "<group>"; };
 		BFBEC8838C761C0A2C708534 /* GutchinTouchTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GutchinTouchTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF557E7C62CB384D2603CF41 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DD1122334455667788990011 /* GestureStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureStatistics.swift; sourceTree = "<group>"; };
+		DD2233445566778899001122 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
 		F80BACC55ACE7DF1BF21705C /* Trigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trigger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,6 +96,7 @@
 			children = (
 				3DB054EA1A8A7A5690A40B7D /* ActionExecutor.swift */,
 				591388447B863AB1271B38FE /* GestureLog.swift */,
+				DD1122334455667788990011 /* GestureStatistics.swift */,
 				A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */,
 				A1B2C3D4E5F60718293A4B5C /* LiveTouchState.swift */,
 				7DC1E20528882B20DA9398F5 /* PresetManager.swift */,
@@ -110,6 +117,7 @@
 				F1A2B3C4D5E60718293A4B5C /* LiveTouchView.swift */,
 				455785A555FBE4C61B590D01 /* LogSidePanel.swift */,
 				52DC958E2E845E35D6977C14 /* MainWindow.swift */,
+				DD2233445566778899001122 /* StatisticsView.swift */,
 				3F9AA128B0872E58AF518488 /* TriggerListPanel.swift */,
 				B08BDB7EF3EDE9A433BDABF5 /* Components */,
 			);
@@ -192,6 +200,7 @@
 				BB1122334455667788990011 /* ModelTests.swift */,
 				BB2233445566778899001122 /* SerializationTests.swift */,
 				BB3344556677889900112233 /* LiveTouchStateTests.swift */,
+				BB4455667788990011223344 /* GestureStatisticsTests.swift */,
 			);
 			path = GutchinTouchToolTests;
 			sourceTree = "<group>";
@@ -318,6 +327,8 @@
 				047BD176EA8475D2CB843670 /* GestureConsoleView.swift in Sources */,
 				982231941044009309851310 /* GesturePreviewView.swift in Sources */,
 				8F56617241408E093C881A1A /* GestureLog.swift in Sources */,
+				CC1122334455667788990011 /* GestureStatistics.swift in Sources */,
+				CC2233445566778899001122 /* StatisticsView.swift in Sources */,
 				D1E2F3A4B5C60718293A4B5C /* LiveTouchState.swift in Sources */,
 				E1F2A3B4C5D60718293A4B5C /* LiveTouchView.swift in Sources */,
 				E2128A12EA0C8CE46B2A4945 /* GutchinTouchToolApp.swift in Sources */,
@@ -342,6 +353,7 @@
 				AA1122334455667788990011 /* ModelTests.swift in Sources */,
 				AA2233445566778899001122 /* SerializationTests.swift in Sources */,
 				AA3344556677889900112233 /* LiveTouchStateTests.swift in Sources */,
+				AA4455667788990011223344 /* GestureStatisticsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

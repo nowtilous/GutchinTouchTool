@@ -15,15 +15,20 @@ struct MainWindow: View {
 
             Divider()
 
-            HSplitView {
-                TriggerListPanel()
-                    .frame(minWidth: 250, idealWidth: 300, maxWidth: 400)
+            if appState.showStatistics {
+                StatisticsView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                HSplitView {
+                    TriggerListPanel()
+                        .frame(minWidth: 250, idealWidth: 300, maxWidth: 400)
 
-                ActionListPanel()
-                    .frame(minWidth: 220, idealWidth: 260, maxWidth: 350)
+                    ActionListPanel()
+                        .frame(minWidth: 220, idealWidth: 260, maxWidth: 350)
 
-                ConfigurationPanel()
-                    .frame(minWidth: 280, idealWidth: 350)
+                    ConfigurationPanel()
+                        .frame(minWidth: 280, idealWidth: 350)
+                }
             }
 
             if showLog || showTouchVisualizer {

@@ -78,3 +78,20 @@ jobs:
             CODE_SIGN_IDENTITY=- \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
+
+  gesture-statistics-tests:
+    name: Gesture Statistics Tests
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+      - name: Run Gesture Statistics Tests
+        run: |
+          xcodebuild test \
+            -scheme GutchinTouchTool \
+            -destination 'platform=macOS' \
+            -only-testing:GutchinTouchToolTests/GestureStatisticsTests \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
