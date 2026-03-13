@@ -61,6 +61,15 @@ enum TrackpadGesture: String, CaseIterable, Identifiable, Codable {
     case circleClockwise = "Circle Clockwise"
     case circleCounterClockwise = "Circle Counter-Clockwise"
 
+    // Drawing gestures (press + draw shape)
+    case drawTriangle = "Draw Triangle"
+
+    // Edge slider gestures (1-finger press + slide along edge, fires repeatedly)
+    case leftEdgeSlideUp = "Left Edge Slide Up"
+    case leftEdgeSlideDown = "Left Edge Slide Down"
+    case rightEdgeSlideUp = "Right Edge Slide Up"
+    case rightEdgeSlideDown = "Right Edge Slide Down"
+
     // Position clicks (click at specific trackpad zones)
     case cornerClickTopLeft = "Corner Click Top Left"
     case cornerClickTopRight = "Corner Click Top Right"

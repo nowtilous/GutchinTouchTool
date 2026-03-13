@@ -33,6 +33,7 @@ struct GesturePreviewView: View {
                     .id(animationID)
             }
             .frame(width: 180, height: 140)
+            .clipped()
             .onAppear { startAnimation() }
             .onChange(of: gesture) { _ in restartAnimation() }
 
@@ -131,6 +132,20 @@ struct GesturePreviewView: View {
             CircleAnimation(clockwise: true, animating: animating)
         case .circleCounterClockwise:
             CircleAnimation(clockwise: false, animating: animating)
+
+        // Drawings
+        case .drawTriangle:
+            TriangleDrawAnimation(animating: animating)
+
+        // Edge sliders
+        case .leftEdgeSlideUp:
+            EdgeDragAnimation(edge: .left, direction: .up, animating: animating)
+        case .leftEdgeSlideDown:
+            EdgeDragAnimation(edge: .left, direction: .down, animating: animating)
+        case .rightEdgeSlideUp:
+            EdgeDragAnimation(edge: .right, direction: .up, animating: animating)
+        case .rightEdgeSlideDown:
+            EdgeDragAnimation(edge: .right, direction: .down, animating: animating)
 
         // Corner/Position clicks
         case .cornerClickTopLeft:
@@ -496,6 +511,126 @@ private struct CircleAnimationContent: View {
         let y = radius * sin(angle)
         return FingerDot(size: 16)
             .offset(x: x, y: y)
+    }
+}
+
+// MARK: - Triangle Draw Animation
+
+struct TriangleDrawAnimation: View {
+    let animating: Bool
+
+    var body: some View {
+        TimelineView(.animation) { timeline in
+            TriangleDrawContent(date: timeline.date)
+        }
+    }
+}
+
+private struct TriangleDrawContent: View {
+    let date: Date
+    @Environment(\.themeColor) private var themeColor
+
+    // Triangle vertices (centered, fits inside trackpad preview)
+    private let vertices: [CGPoint] = [
+        CGPoint(x: 0, y: -22),   // top
+        CGPoint(x: 25, y: 18),   // bottom-right
+        CGPoint(x: -25, y: 18),  // bottom-left
+    ]
+
+    var body: some View {
+        let t = date.timeIntervalSinceReferenceDate
+        let period: Double = 2.5
+        let progress = CGFloat(t.truncatingRemainder(dividingBy: period) / period)
+
+        Canvas { context, size in
+            let center = CGPoint(x: size.width / 2, y: size.height / 2)
+            let pts = vertices.map { CGPoint(x: center.x + $0.x, y: center.y + $0.y) }
+
+            // Triangle outline (faint)
+            var outline = Path()
+            outline.move(to: pts[0])
+            outline.addLine(to: pts[1])
+            outline.addLine(to: pts[2])
+            outline.closeSubpath()
+            context.stroke(outline, with: .color(themeColor.opacity(0.15)), lineWidth: 2)
+
+            // Animated trail
+            let trailLen: CGFloat = 0.2
+            let start = max(0, progress - trailLen)
+            var trail = Path()
+            let steps = 20
+            for i in 0...steps {
+                let t = start + (progress - start) * CGFloat(i) / CGFloat(steps)
+                let pt = pointOnTriangle(min(t, 1.0), center: center)
+                if i == 0 { trail.move(to: pt) }
+                else { trail.addLine(to: pt) }
+            }
+            context.stroke(trail, with: .color(themeColor.opacity(0.5)),
+                          style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
+
+            // Finger dot
+            let fp = pointOnTriangle(min(progress, 1.0), center: center)
+            let dotRect = CGRect(x: fp.x - 8, y: fp.y - 8, width: 16, height: 16)
+            context.fill(Circle().path(in: dotRect), with: .color(themeColor))
+            let glowRect = CGRect(x: fp.x - 11, y: fp.y - 11, width: 22, height: 22)
+            context.fill(Circle().path(in: glowRect), with: .color(themeColor.opacity(0.3)))
+        }
+    }
+
+    private func pointOnTriangle(_ t: CGFloat, center: CGPoint) -> CGPoint {
+        let segment = t * 3
+        let idx = min(Int(segment), 2)
+        let frac = segment - CGFloat(idx)
+        let a = vertices[idx]
+        let b = vertices[(idx + 1) % 3]
+        return CGPoint(
+            x: center.x + a.x + (b.x - a.x) * frac,
+            y: center.y + a.y + (b.y - a.y) * frac
+        )
+    }
+}
+
+// MARK: - Edge Drag Animation
+
+struct EdgeDragAnimation: View {
+    enum Edge { case left, right }
+    enum Direction { case up, down }
+    let edge: Edge
+    let direction: Direction
+    let animating: Bool
+    @Environment(\.themeColor) private var themeColor
+    @State private var progress: CGFloat = 0
+
+    var body: some View {
+        let edgeX: CGFloat = edge == .left ? -65 : 65
+        let startY: CGFloat = direction == .up ? 30 : -30
+        let endY: CGFloat = direction == .up ? -30 : 30
+
+        ZStack {
+            // Edge zone highlight
+            RoundedRectangle(cornerRadius: 4)
+                .fill(themeColor.opacity(0.08))
+                .frame(width: 24, height: 110)
+                .offset(x: edgeX)
+
+            // Arrow indicator
+            Image(systemName: direction == .up ? "arrow.up" : "arrow.down")
+                .font(.system(size: 12, weight: .light))
+                .foregroundColor(themeColor.opacity(0.3))
+                .offset(x: edgeX, y: 0)
+
+            // Finger dot
+            FingerDot(size: 16)
+                .offset(x: edgeX, y: startY + (endY - startY) * progress)
+        }
+        .onAppear { startLoop() }
+    }
+
+    private func startLoop() {
+        progress = 0
+        withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: false)) {
+            progress = 1
+        }
     }
 }
 

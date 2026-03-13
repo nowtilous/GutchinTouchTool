@@ -152,6 +152,18 @@ class TrackpadMonitor {
     private var circleFireCount: Int = 0                    // how many times we've fired this session
     private var trackpadIsPressed = false                   // true when trackpad is clicked down
 
+    // Triangle gesture detection (1-finger pressing down and drawing)
+    private var trianglePoints: [(x: Float, y: Float)] = []
+    private var triangleFired = false
+
+    // Edge slider detection (1-finger press + slide along edge, fires repeatedly)
+    private var edgeSlideLastY: Float?
+    private var edgeSlideEdge: EdgeSide?
+    private let edgeSlideZoneWidth: Float = 0.15   // leftmost/rightmost 15%
+    private let edgeSlideStep: Float = 0.04        // fire every ~4% of trackpad height
+
+    private enum EdgeSide { case left, right }
+
     // Position click detection (1-finger click at specific zone)
     private var lastSingleFingerPos: (x: Float, y: Float)?  // last known 1-finger position
     private var positionClickFired = false                   // prevent re-firing on same press
@@ -497,7 +509,7 @@ class TrackpadMonitor {
             peakFingers = 0
         }
 
-        // --- Circle gesture detection (1-finger pressing down and drawing) ---
+        // --- Drawing gesture detection (1-finger pressing down and drawing) ---
         if activeFingersCount == 1, fingerXPositions.count == 1,
            let raw = rawTouches {
             let t0 = readTouch(from: raw, at: 0)
@@ -509,12 +521,17 @@ class TrackpadMonitor {
             let isClickedNow = NSEvent.pressedMouseButtons & 0x1 != 0
             if x > 0.01 && y > 0.01 && isClickedNow {
                 trackCirclePoint(x: x, y: y)
+                trackTrianglePoint(x: x, y: y)
+                trackEdgeDrag(x: x, y: y)
             } else {
                 resetCircleState()
+                resetTriangleState()
+                resetEdgeDragState()
             }
         } else {
-            // Reset circle tracking when not exactly 1 finger
             resetCircleState()
+            resetTriangleState()
+            resetEdgeDragState()
         }
     }
 
@@ -586,6 +603,7 @@ class TrackpadMonitor {
             if angleSinceLastFire >= fireAngleThreshold {
                 circleLastFiredAngle = circleCumulativeAngle
                 circleFireCount += 1
+                resetTriangleState()  // suppress triangle since circle won
 
                 if circleCumulativeAngle > 0 {
                     DispatchQueue.main.async { [self] in
@@ -639,6 +657,164 @@ class TrackpadMonitor {
         circleLastFiredAngle = 0
         circleStartTime = nil
         circleFireCount = 0
+    }
+
+    // MARK: - Triangle gesture helpers
+
+    private func trackTrianglePoint(x: Float, y: Float) {
+        trianglePoints.append((x: x, y: y))
+        // Don't check triangle if circle already fired this session, or triangle already fired
+        guard !triangleFired, circleFireCount == 0, trianglePoints.count >= 20 else { return }
+        if isTriangle() {
+            triangleFired = true
+            resetCircleState()  // suppress circle since triangle won
+            DispatchQueue.main.async { [self] in
+                GestureLog.shared.logFromAnyThread("Drawing: Triangle detected", level: .detect)
+                fireGesture(.drawTriangle)
+            }
+        }
+    }
+
+    /// Detect if the drawn path forms a triangle:
+    /// 1. Simplify the path using Ramer-Douglas-Peucker
+    /// 2. Check if simplified path has ~3 corners
+    /// 3. Verify the path is roughly closed
+    private func isTriangle() -> Bool {
+        let pts = trianglePoints
+        guard pts.count >= 20 else { return false }
+
+        // Path must span a minimum area (not just jitter)
+        let xs = pts.map(\.x), ys = pts.map(\.y)
+        let minX = xs.min()!, maxX = xs.max()!, minY = ys.min()!, maxY = ys.max()!
+        let span = max(maxX - minX, maxY - minY)
+        guard span > 0.08 else { return false }
+
+        // Reject if path looks circular (let circle detector handle it)
+        if isPathCircular() { return false }
+
+        // Check path is roughly closed (end near start)
+        let startX = pts.first!.x, startY = pts.first!.y
+        let endX = pts.last!.x, endY = pts.last!.y
+        let closeDist = sqrt((endX - startX) * (endX - startX) + (endY - startY) * (endY - startY))
+        guard closeDist < span * 0.4 else { return false }
+
+        // Simplify path with RDP algorithm
+        let simplified = rdpSimplify(pts, epsilon: span * 0.08)
+        // A triangle simplifies to 3-5 points (3 corners + closure)
+        // Remove last point if it's close to first (closure duplicate)
+        var corners = simplified
+        if corners.count >= 3 {
+            let last = corners.last!, first = corners.first!
+            let d = sqrt((last.x - first.x) * (last.x - first.x) + (last.y - first.y) * (last.y - first.y))
+            if d < span * 0.15 {
+                corners.removeLast()
+            }
+        }
+
+        // Should have exactly 3 corners
+        guard corners.count == 3 else { return false }
+
+        // Verify angles at each corner are reasonable for a triangle (30°–150°)
+        for i in 0..<3 {
+            let a = corners[i]
+            let b = corners[(i + 1) % 3]
+            let c = corners[(i + 2) % 3]
+            let angle = angleBetween(a: a, vertex: b, c: c)
+            if angle < 0.5 || angle > 2.6 { return false } // ~30° to ~150°
+        }
+
+        return true
+    }
+
+    /// Ramer-Douglas-Peucker line simplification
+    private func rdpSimplify(_ points: [(x: Float, y: Float)], epsilon: Float) -> [(x: Float, y: Float)] {
+        guard points.count > 2 else { return points }
+
+        // Find the point with maximum distance from the line between first and last
+        let first = points.first!, last = points.last!
+        var maxDist: Float = 0
+        var maxIdx = 0
+        for i in 1..<(points.count - 1) {
+            let d = perpendicularDistance(point: points[i], lineStart: first, lineEnd: last)
+            if d > maxDist {
+                maxDist = d
+                maxIdx = i
+            }
+        }
+
+        if maxDist > epsilon {
+            let left = rdpSimplify(Array(points[0...maxIdx]), epsilon: epsilon)
+            let right = rdpSimplify(Array(points[maxIdx...]), epsilon: epsilon)
+            return Array(left.dropLast()) + right
+        } else {
+            return [first, last]
+        }
+    }
+
+    private func perpendicularDistance(point: (x: Float, y: Float), lineStart: (x: Float, y: Float), lineEnd: (x: Float, y: Float)) -> Float {
+        let dx = lineEnd.x - lineStart.x
+        let dy = lineEnd.y - lineStart.y
+        let len = sqrt(dx * dx + dy * dy)
+        guard len > 0.0001 else {
+            return sqrt((point.x - lineStart.x) * (point.x - lineStart.x) + (point.y - lineStart.y) * (point.y - lineStart.y))
+        }
+        return abs(dy * point.x - dx * point.y + lineEnd.x * lineStart.y - lineEnd.y * lineStart.x) / len
+    }
+
+    private func angleBetween(a: (x: Float, y: Float), vertex: (x: Float, y: Float), c: (x: Float, y: Float)) -> Float {
+        let v1x = a.x - vertex.x, v1y = a.y - vertex.y
+        let v2x = c.x - vertex.x, v2y = c.y - vertex.y
+        let dot = v1x * v2x + v1y * v2y
+        let cross = v1x * v2y - v1y * v2x
+        return abs(atan2(cross, dot))
+    }
+
+    private func resetTriangleState() {
+        trianglePoints.removeAll()
+        triangleFired = false
+    }
+
+    // MARK: - Edge drag detection
+
+    private func trackEdgeDrag(x: Float, y: Float) {
+        // Determine if finger is on an edge
+        let onLeft = x < edgeSlideZoneWidth
+        let onRight = x > (1.0 - edgeSlideZoneWidth)
+
+        guard onLeft || onRight else {
+            resetEdgeDragState()
+            return
+        }
+
+        let side: EdgeSide = onLeft ? .left : .right
+
+        guard let lastY = edgeSlideLastY, edgeSlideEdge == side else {
+            // Start tracking
+            edgeSlideLastY = y
+            edgeSlideEdge = side
+            return
+        }
+
+        let deltaY = y - lastY
+        if abs(deltaY) >= edgeSlideStep {
+            // Fire once per step, then advance the anchor
+            let gesture: TrackpadGesture
+            switch (side, deltaY > 0) {
+            case (.left, true):   gesture = .leftEdgeSlideUp
+            case (.left, false):  gesture = .leftEdgeSlideDown
+            case (.right, true):  gesture = .rightEdgeSlideUp
+            case (.right, false): gesture = .rightEdgeSlideDown
+            }
+            edgeSlideLastY = y
+            DispatchQueue.main.async { [self] in
+                fireGesture(gesture)
+            }
+        }
+    }
+
+    private func resetEdgeDragState() {
+        edgeSlideLastY = nil
+        edgeSlideEdge = nil
     }
 
     // MARK: - Position click detection
@@ -750,6 +926,8 @@ class TrackpadMonitor {
             self?.trackpadIsPressed = false
             self?.positionClickFired = false
             self?.resetCircleState()
+            self?.resetTriangleState()
+            self?.resetEdgeDragState()
         }
 
         if let m = NSEvent.addGlobalMonitorForEvents(matching: .scrollWheel, handler: scrollHandler) {
