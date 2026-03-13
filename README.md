@@ -4,7 +4,7 @@ Have fun.
 
 ## Demo
 
-https://github.com/nowtilous/GutchinTouchTool/releases/download/v0.1.0/demo.mov
+![GutchinTouchTool Demo](assets/demo.gif)
 
 ## Building
 
