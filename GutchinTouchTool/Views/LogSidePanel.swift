@@ -66,6 +66,7 @@ struct LogSidePanel: View {
 
 private struct LogEntryRow: View {
     let entry: GestureLogEntry
+    @State private var ripple = false
 
     private static let timeFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -79,6 +80,12 @@ private struct LogEntryRow: View {
                 .fill(colorForLevel(entry.level))
                 .frame(width: 6, height: 6)
                 .padding(.top, 4)
+                .overlay(
+                    Circle()
+                        .stroke(colorForLevel(entry.level).opacity(ripple ? 0 : 0.6), lineWidth: 1.5)
+                        .frame(width: ripple ? 20 : 6, height: ripple ? 20 : 6)
+                        .opacity(entry.level == .fire ? 1 : 0)
+                )
 
             Text(Self.timeFormatter.string(from: entry.timestamp))
                 .foregroundStyle(Color(nsColor: .tertiaryLabelColor))
@@ -90,6 +97,18 @@ private struct LogEntryRow: View {
         .font(.system(size: 10.5, design: .monospaced))
         .padding(.horizontal, 8)
         .padding(.vertical, 2)
+        .background(
+            entry.level == .fire
+                ? colorForLevel(entry.level).opacity(ripple ? 0 : 0.08)
+                : Color.clear
+        )
+        .onAppear {
+            if entry.level == .fire {
+                withAnimation(.easeOut(duration: 0.6)) {
+                    ripple = true
+                }
+            }
+        }
     }
 
     private func colorForLevel(_ level: LogLevel) -> Color {
