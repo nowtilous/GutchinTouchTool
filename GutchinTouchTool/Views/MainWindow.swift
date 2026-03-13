@@ -4,13 +4,18 @@ struct MainWindow: View {
     @EnvironmentObject var appState: AppState
     @ObservedObject private var gestureLog = GestureLog.shared
     @State private var showLog = true
+    @State private var showTouchVisualizer = true
 
     var body: some View {
         HStack(spacing: 0) {
-            HSplitView {
-                AppSidebar()
-                    .frame(minWidth: 180, idealWidth: 200, maxWidth: 250)
+            // Sidebar — fixed width, not draggable
+            AppSidebar()
+                .frame(width: 200, alignment: .leading)
+                .fixedSize(horizontal: true, vertical: false)
 
+            Divider()
+
+            HSplitView {
                 TriggerListPanel()
                     .frame(minWidth: 250, idealWidth: 300, maxWidth: 400)
 
@@ -21,15 +26,44 @@ struct MainWindow: View {
                     .frame(minWidth: 280, idealWidth: 350)
             }
 
-            if showLog {
-                LogSidePanel(entries: gestureLog.entries)
-                    .frame(width: 320)
-                    .transition(.move(edge: .trailing))
+            if showLog || showTouchVisualizer {
+                VStack(spacing: 0) {
+                    if showLog {
+                        LogSidePanel(entries: gestureLog.entries)
+                    }
+
+                    if showTouchVisualizer {
+                        if showLog { Divider() }
+                        VStack(spacing: 4) {
+                            HStack {
+                                Text("Live Touch")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.top, 4)
+
+                            LiveTouchView()
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 8)
+                                .padding(.bottom, 8)
+                        }
+                        .frame(height: showLog ? 180 : 220)
+                        .background(Color(nsColor: .controlBackgroundColor))
+                    }
+                }
+                .frame(width: 280)
+                .transition(.move(edge: .trailing))
             }
         }
         .background(Color(nsColor: .windowBackgroundColor))
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
+                Button(action: { withAnimation { showTouchVisualizer.toggle() } }) {
+                    Label("Touch Viz", systemImage: "hand.point.up.braille.fill")
+                        .foregroundStyle(showTouchVisualizer ? .cyan : .secondary)
+                }
                 Button(action: { withAnimation { showLog.toggle() } }) {
                     Label("Console", systemImage: "terminal.fill")
                         .foregroundStyle(showLog ? .green : .secondary)
