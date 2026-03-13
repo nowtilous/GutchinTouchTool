@@ -182,4 +182,74 @@ final class SerializationTests: XCTestCase {
             XCTAssertEqual(decoded.actionType, actionType, "Round-trip failed for \(actionType)")
         }
     }
+
+    // MARK: - Resilient decoding
+
+    func testPresetSkipsBadTriggersWithoutLosing() throws {
+        // Build a preset with 2 valid triggers and 1 with a fake gesture name
+        let json = """
+        {
+            "id": "11111111-1111-1111-1111-111111111111",
+            "name": "Resilient Test",
+            "isEnabled": true,
+            "isMaster": false,
+            "triggers": [
+                {
+                    "id": "22222222-2222-2222-2222-222222222222",
+                    "name": "Good Trigger",
+                    "input": { "trackpadGesture": { "_0": "4 Finger Tap" } },
+                    "actions": [],
+                    "isEnabled": true,
+                    "order": 0
+                },
+                {
+                    "id": "33333333-3333-3333-3333-333333333333",
+                    "name": "Bad Trigger",
+                    "input": { "trackpadGesture": { "_0": "Nonexistent Gesture XYZ" } },
+                    "actions": [],
+                    "isEnabled": true,
+                    "order": 1
+                },
+                {
+                    "id": "44444444-4444-4444-4444-444444444444",
+                    "name": "Another Good",
+                    "input": { "trackpadGesture": { "_0": "3 Finger Tap" } },
+                    "actions": [],
+                    "isEnabled": true,
+                    "order": 2
+                }
+            ],
+            "appTargets": [{ "id": "55555555-5555-5555-5555-555555555555", "name": "All Apps" }],
+            "createdAt": "2026-01-01T00:00:00Z",
+            "modifiedAt": "2026-01-01T00:00:00Z"
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let preset = try decoder.decode(Preset.self, from: data)
+
+        // Should have 2 triggers (the bad one skipped), not 0 or crash
+        XCTAssertEqual(preset.triggers.count, 2, "Should skip bad trigger and keep good ones")
+        XCTAssertEqual(preset.triggers[0].name, "Good Trigger")
+        XCTAssertEqual(preset.triggers[1].name, "Another Good")
+        XCTAssertEqual(preset.name, "Resilient Test")
+    }
+
+    func testPresetDecodesAllValidTriggersWhenNoneBad() throws {
+        var preset = Preset(name: "AllGood")
+        preset.addTrigger(Trigger(name: "T1", input: .trackpadGesture(.drawTriangle)))
+        preset.addTrigger(Trigger(name: "T2", input: .trackpadGesture(.leftEdgeSlideUp)))
+        preset.addTrigger(Trigger(name: "T3", input: .trackpadGesture(.rightEdgeSlideDown)))
+
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let data = try encoder.encode(preset)
+
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let decoded = try decoder.decode(Preset.self, from: data)
+
+        XCTAssertEqual(decoded.triggers.count, 3)
+    }
 }

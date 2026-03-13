@@ -433,4 +433,164 @@ final class TrackpadPipelineTests: XCTestCase {
             }
         }
     }
+
+    // MARK: - Edge slider tests
+
+    func testLeftEdgeSlideUpTriggersAction() {
+        let expectation = expectation(description: "Left edge slide up fires")
+
+        var trigger = Trigger(name: "L Slide Up", input: .trackpadGesture(.leftEdgeSlideUp))
+        trigger.actions = [TriggerAction(actionType: .brightnessUp)]
+
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        var firedAction: TriggerAction?
+        ActionExecutor.onActionExecuted = { a in
+            firedAction = a
+            expectation.fulfill()
+        }
+
+        monitor.fireGestureForTest(.leftEdgeSlideUp)
+
+        waitForExpectations(timeout: 2.0)
+        XCTAssertEqual(firedAction?.actionType, .brightnessUp)
+        monitor.unregisterAll()
+    }
+
+    func testRightEdgeSlideDownTriggersAction() {
+        let expectation = expectation(description: "Right edge slide down fires")
+
+        var trigger = Trigger(name: "R Slide Down", input: .trackpadGesture(.rightEdgeSlideDown))
+        trigger.actions = [TriggerAction(actionType: .brightnessDown)]
+
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        var firedAction: TriggerAction?
+        ActionExecutor.onActionExecuted = { a in
+            firedAction = a
+            expectation.fulfill()
+        }
+
+        monitor.fireGestureForTest(.rightEdgeSlideDown)
+
+        waitForExpectations(timeout: 2.0)
+        XCTAssertEqual(firedAction?.actionType, .brightnessDown)
+        monitor.unregisterAll()
+    }
+
+    func testEdgeSlideUpDoesNotFireSlideDown() {
+        let expectation = expectation(description: "Should NOT fire")
+        expectation.isInverted = true
+
+        var trigger = Trigger(name: "Down Only", input: .trackpadGesture(.rightEdgeSlideDown))
+        trigger.actions = [TriggerAction(actionType: .sendKeyStroke)]
+
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        ActionExecutor.onActionExecuted = { _ in expectation.fulfill() }
+
+        monitor.fireGestureForTest(.rightEdgeSlideUp)
+
+        waitForExpectations(timeout: 1.0)
+        monitor.unregisterAll()
+    }
+
+    func testEdgeSliderGesturesCodable() throws {
+        let gestures: [TrackpadGesture] = [.leftEdgeSlideUp, .leftEdgeSlideDown, .rightEdgeSlideUp, .rightEdgeSlideDown]
+        for gesture in gestures {
+            let trigger = Trigger(name: gesture.rawValue, input: .trackpadGesture(gesture))
+            let data = try JSONEncoder().encode(trigger)
+            let decoded = try JSONDecoder().decode(Trigger.self, from: data)
+            if case .trackpadGesture(let g) = decoded.input {
+                XCTAssertEqual(g, gesture)
+            } else {
+                XCTFail("Expected trackpadGesture for \(gesture)")
+            }
+        }
+    }
+
+    // MARK: - Triangle drawing tests
+
+    func testDrawTriangleTriggersAction() {
+        let expectation = expectation(description: "Triangle fires")
+
+        var trigger = Trigger(name: "Triangle", input: .trackpadGesture(.drawTriangle))
+        trigger.actions = [TriggerAction(actionType: .lockScreen)]
+
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        var firedAction: TriggerAction?
+        ActionExecutor.onActionExecuted = { a in
+            firedAction = a
+            expectation.fulfill()
+        }
+
+        monitor.fireGestureForTest(.drawTriangle)
+
+        waitForExpectations(timeout: 2.0)
+        XCTAssertEqual(firedAction?.actionType, .lockScreen)
+        monitor.unregisterAll()
+    }
+
+    func testDrawTriangleCodable() throws {
+        let trigger = Trigger(name: "Tri", input: .trackpadGesture(.drawTriangle))
+        let data = try JSONEncoder().encode(trigger)
+        let decoded = try JSONDecoder().decode(Trigger.self, from: data)
+        if case .trackpadGesture(let g) = decoded.input {
+            XCTAssertEqual(g, .drawTriangle)
+        } else {
+            XCTFail("Expected trackpadGesture drawTriangle")
+        }
+    }
+
+    // MARK: - Global toggle tests
+
+    func testGlobalToggleOffSuppressesActions() {
+        let expectation = expectation(description: "Should NOT fire when disabled")
+        expectation.isInverted = true
+
+        var trigger = Trigger(name: "Tap", input: .trackpadGesture(.fourFingerTap))
+        trigger.actions = [TriggerAction(actionType: .volumeUp)]
+
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        // Disable global toggle
+        UserDefaults.standard.set(false, forKey: "GTTGlobalEnabled")
+
+        ActionExecutor.onActionExecuted = { _ in expectation.fulfill() }
+
+        monitor.fireGestureForTest(.fourFingerTap)
+
+        waitForExpectations(timeout: 1.0)
+
+        // Restore
+        UserDefaults.standard.removeObject(forKey: "GTTGlobalEnabled")
+        monitor.unregisterAll()
+    }
+
+    func testGlobalToggleOnAllowsActions() {
+        let expectation = expectation(description: "Should fire when enabled")
+
+        var trigger = Trigger(name: "Tap", input: .trackpadGesture(.fourFingerTap))
+        trigger.actions = [TriggerAction(actionType: .volumeUp)]
+
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        UserDefaults.standard.set(true, forKey: "GTTGlobalEnabled")
+
+        ActionExecutor.onActionExecuted = { _ in expectation.fulfill() }
+
+        monitor.fireGestureForTest(.fourFingerTap)
+
+        waitForExpectations(timeout: 2.0)
+
+        UserDefaults.standard.removeObject(forKey: "GTTGlobalEnabled")
+        monitor.unregisterAll()
+    }
 }
