@@ -53,6 +53,35 @@ struct AppSidebar: View {
                 }
             }
             .listStyle(.sidebar)
+
+            Divider()
+
+            // Accent Color Picker
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Accent Color")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                HStack(spacing: 5) {
+                    ForEach(AccentColorChoice.allCases) { choice in
+                        Circle()
+                            .fill(choice.color)
+                            .frame(width: 16, height: 16)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.white, lineWidth: appState.accentColorChoice == choice ? 2 : 0)
+                            )
+                            .shadow(color: appState.accentColorChoice == choice ? choice.color.opacity(0.6) : .clear, radius: 3)
+                            .onTapGesture {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    appState.accentColorChoice = choice
+                                    UserDefaults.standard.set(choice.rawValue, forKey: "GTTAccentColor")
+                                }
+                            }
+                    }
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
         }
         .background(Color(nsColor: .controlBackgroundColor))
     }

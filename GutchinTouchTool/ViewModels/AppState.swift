@@ -2,6 +2,23 @@ import Foundation
 import SwiftUI
 import Combine
 
+enum AccentColorChoice: String, CaseIterable, Identifiable {
+    case blue, purple, pink, red, orange, yellow, green, cyan
+    var id: String { rawValue }
+    var color: Color {
+        switch self {
+        case .blue: return .blue
+        case .purple: return .purple
+        case .pink: return .pink
+        case .red: return .red
+        case .orange: return .orange
+        case .yellow: return .yellow
+        case .green: return .green
+        case .cyan: return .cyan
+        }
+    }
+}
+
 @MainActor
 class AppState: ObservableObject {
     @Published var currentPreset: Preset
@@ -13,6 +30,13 @@ class AppState: ObservableObject {
     @Published var showingAddTrigger: Bool = false
     @Published var showingAddAction: Bool = false
     @Published var showingAddApp: Bool = false
+    @Published var accentColorChoice: AccentColorChoice = {
+        if let raw = UserDefaults.standard.string(forKey: "GTTAccentColor"),
+           let choice = AccentColorChoice(rawValue: raw) {
+            return choice
+        }
+        return .blue
+    }()
 
     private let presetManager = PresetManager()
     let keyboardMonitor = KeyboardMonitor()
