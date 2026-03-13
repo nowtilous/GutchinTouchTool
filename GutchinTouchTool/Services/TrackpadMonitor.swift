@@ -128,7 +128,7 @@ class TrackpadMonitor {
     private var tipTapPending = false         // we saw 1→2 with a valid rest, waiting for 2→1 or 2→0→1
     private var tipTapPendingTime: Date?      // when the 2-finger phase started (for timeout)
     private let tipTapMaxTapDuration: TimeInterval = 0.35 // max time the tapping finger can be down
-    private let tipTapMinRestTime: TimeInterval = 0.04    // min time resting finger must be down before tap
+    private let tipTapMinRestTime: TimeInterval = 0.12    // min time resting finger must be down before tap
     private var lastTipTapFiredTime: Date?                // cooldown: prevent false fires when switching sides
     private let tipTapCooldown: TimeInterval = 0.25       // min time between consecutive TipTap fires
 
@@ -818,7 +818,8 @@ class TrackpadMonitor {
         guard pressDragActive && currentFingers == 2 else {
             pressDragDeltaX = 0; pressDragActive = false; return
         }
-        let threshold: CGFloat = 30
+        let stored = UserDefaults.standard.double(forKey: "GTTPressDragThreshold")
+        let threshold: CGFloat = stored > 0 ? CGFloat(stored) : 300
         if abs(pressDragDeltaX) > threshold {
             let gesture: TrackpadGesture = pressDragDeltaX > 0 ? .twoFingerPressDragRight : .twoFingerPressDragLeft
             fireGesture(gesture)

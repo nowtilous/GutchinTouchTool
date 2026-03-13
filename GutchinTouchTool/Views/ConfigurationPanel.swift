@@ -54,6 +54,7 @@ struct TriggerConfigView: View {
 
     @State private var name: String
     @State private var isEnabled: Bool
+    @AppStorage("GTTPressDragThreshold") private var pressDragThreshold: Double = 300
 
     init(trigger: Trigger) {
         self.trigger = trigger
@@ -136,6 +137,33 @@ struct TriggerConfigView: View {
                 GesturePreviewView(gesture: gesture)
                     .frame(maxWidth: .infinity)
                     .padding(.top, 8)
+
+                // Press-drag sensitivity slider
+                if gesture == .twoFingerPressDragLeft || gesture == .twoFingerPressDragRight {
+                    GroupBox("Press-Drag Sensitivity") {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Min. drag distance:")
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(Int(pressDragThreshold)) pt")
+                                    .font(.system(.body, design: .monospaced))
+                                    .foregroundColor(.accentColor)
+                            }
+                            Slider(value: $pressDragThreshold, in: 10...600, step: 10)
+                            HStack {
+                                Text("Sensitive")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("Long swipe")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(8)
+                    }
+                }
             }
 
             Spacer()
