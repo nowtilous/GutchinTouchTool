@@ -530,11 +530,13 @@ class TrackpadMonitor {
                 resetCircleState()
                 resetTriangleState()
                 resetEdgeDragState()
+                stopSuppressingMouse()
             }
         } else {
             resetCircleState()
             resetTriangleState()
             resetEdgeDragState()
+            stopSuppressingMouse()
         }
     }
 
@@ -661,7 +663,6 @@ class TrackpadMonitor {
         circleLastFiredAngle = 0
         circleStartTime = nil
         circleFireCount = 0
-        stopSuppressingMouse()
     }
 
     private func startSuppressingMouse() {
@@ -820,7 +821,6 @@ class TrackpadMonitor {
     private func resetTriangleState() {
         trianglePoints.removeAll()
         triangleFired = false
-        stopSuppressingMouse()
     }
 
     // MARK: - Edge drag detection
@@ -865,7 +865,6 @@ class TrackpadMonitor {
     private func resetEdgeDragState() {
         edgeSlideLastY = nil
         edgeSlideEdge = nil
-        stopSuppressingMouse()
     }
 
     // MARK: - Position click detection
@@ -979,6 +978,7 @@ class TrackpadMonitor {
             self?.resetCircleState()
             self?.resetTriangleState()
             self?.resetEdgeDragState()
+            self?.stopSuppressingMouse()
         }
 
         if let m = NSEvent.addGlobalMonitorForEvents(matching: .scrollWheel, handler: scrollHandler) {
