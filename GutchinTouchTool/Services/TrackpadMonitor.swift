@@ -151,6 +151,9 @@ class TrackpadMonitor {
     private var circleStartTime: Date?                      // when circling started
     private var circleFireCount: Int = 0                    // how many times we've fired this session
     private var trackpadIsPressed = false                   // true when trackpad is clicked down
+    private var circleDrawingActive = false                 // true while circle gesture is being drawn
+    private var mouseEventTap: CFMachPort?                  // CGEvent tap for suppressing mouse during circle
+    private var mouseEventTapRunLoopSource: CFRunLoopSource?
 
     // Triangle gesture detection (1-finger pressing down and drawing)
     private var trianglePoints: [(x: Float, y: Float)] = []
@@ -583,6 +586,7 @@ class TrackpadMonitor {
             // Progressive firing: fire every N degrees of rotation, accelerating over time.
             if circleStartTime == nil {
                 circleStartTime = Date()
+                startSuppressingMouse()
             }
 
             let elapsed = Date().timeIntervalSince(circleStartTime ?? Date())
@@ -657,6 +661,48 @@ class TrackpadMonitor {
         circleLastFiredAngle = 0
         circleStartTime = nil
         circleFireCount = 0
+        stopSuppressingMouse()
+    }
+
+    private func startSuppressingMouse() {
+        let suppress = UserDefaults.standard.object(forKey: "GTTSuppressMouseDuringDrawing") as? Bool ?? true
+        guard suppress, !circleDrawingActive else { return }
+        circleDrawingActive = true
+
+        let eventMask: CGEventMask = (1 << CGEventType.mouseMoved.rawValue)
+            | (1 << CGEventType.leftMouseDragged.rawValue)
+            | (1 << CGEventType.rightMouseDragged.rawValue)
+
+        guard let tap = CGEvent.tapCreate(
+            tap: .cgSessionEventTap,
+            place: .headInsertEventTap,
+            options: .defaultTap,
+            eventsOfInterest: eventMask,
+            callback: { _, _, event, _ in
+                // Suppress the event by returning nil
+                return nil
+            },
+            userInfo: nil
+        ) else { return }
+
+        mouseEventTap = tap
+        let source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
+        mouseEventTapRunLoopSource = source
+        CFRunLoopAddSource(CFRunLoopGetMain(), source, .commonModes)
+        CGEvent.tapEnable(tap: tap, enable: true)
+    }
+
+    private func stopSuppressingMouse() {
+        guard circleDrawingActive else { return }
+        circleDrawingActive = false
+        if let tap = mouseEventTap {
+            CGEvent.tapEnable(tap: tap, enable: false)
+            if let source = mouseEventTapRunLoopSource {
+                CFRunLoopRemoveSource(CFRunLoopGetMain(), source, .commonModes)
+            }
+            mouseEventTap = nil
+            mouseEventTapRunLoopSource = nil
+        }
     }
 
     // MARK: - Triangle gesture helpers
@@ -665,6 +711,8 @@ class TrackpadMonitor {
         trianglePoints.append((x: x, y: y))
         // Don't check triangle if circle already fired this session, or triangle already fired
         guard !triangleFired, circleFireCount == 0, trianglePoints.count >= 20 else { return }
+        // Start suppressing mouse once we have enough points for a potential drawing
+        if trianglePoints.count == 20 { startSuppressingMouse() }
         if isTriangle() {
             triangleFired = true
             resetCircleState()  // suppress circle since triangle won
@@ -772,6 +820,7 @@ class TrackpadMonitor {
     private func resetTriangleState() {
         trianglePoints.removeAll()
         triangleFired = false
+        stopSuppressingMouse()
     }
 
     // MARK: - Edge drag detection
@@ -792,6 +841,7 @@ class TrackpadMonitor {
             // Start tracking
             edgeSlideLastY = y
             edgeSlideEdge = side
+            startSuppressingMouse()
             return
         }
 
@@ -815,6 +865,7 @@ class TrackpadMonitor {
     private func resetEdgeDragState() {
         edgeSlideLastY = nil
         edgeSlideEdge = nil
+        stopSuppressingMouse()
     }
 
     // MARK: - Position click detection

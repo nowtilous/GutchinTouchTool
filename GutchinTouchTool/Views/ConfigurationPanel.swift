@@ -56,6 +56,7 @@ struct TriggerConfigView: View {
     @State private var isEnabled: Bool
     @AppStorage("GTTPressDragThreshold") private var pressDragThreshold: Double = 300
     @AppStorage("GTTTipTapMinRestTime") private var tipTapMinRestTime: Double = 0.12
+    @AppStorage("GTTSuppressMouseDuringDrawing") private var suppressMouseDuringDrawing: Bool = true
 
     init(trigger: Trigger) {
         self.trigger = trigger
@@ -161,6 +162,21 @@ struct TriggerConfigView: View {
                                     .font(.caption2)
                                     .foregroundColor(.secondary)
                             }
+                        }
+                        .padding(8)
+                    }
+                }
+
+                // Mouse suppression toggle for drawings & sliders
+                if [.circleClockwise, .circleCounterClockwise, .drawTriangle,
+                    .leftEdgeSlideUp, .leftEdgeSlideDown, .rightEdgeSlideUp, .rightEdgeSlideDown]
+                    .contains(gesture) {
+                    GroupBox("Mouse Suppression") {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Toggle("Suppress mouse while drawing", isOn: $suppressMouseDuringDrawing)
+                            Text("Disables mouse movement during drawings and edge sliders to prevent accidental clicks.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
                         .padding(8)
                     }
