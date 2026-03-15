@@ -57,6 +57,7 @@ struct TriggerConfigView: View {
     @AppStorage("GTTPressDragThreshold") private var pressDragThreshold: Double = 300
     @AppStorage("GTTTipTapMinRestTime") private var tipTapMinRestTime: Double = 0.12
     @AppStorage("GTTSuppressMouseDuringDrawing") private var suppressMouseDuringDrawing: Bool = true
+    // swipeMinVelocity is per-gesture, handled via manual UserDefaults binding below
 
     init(trigger: Trigger) {
         self.trigger = trigger
@@ -207,6 +208,15 @@ struct TriggerConfigView: View {
                         }
                         .padding(8)
                     }
+                }
+
+                // Swipe velocity threshold (per-gesture)
+                if [.twoFingerSwipeUp, .twoFingerSwipeDown, .twoFingerSwipeLeft, .twoFingerSwipeRight,
+                    .threeFingerSwipeUp, .threeFingerSwipeDown, .threeFingerSwipeLeft, .threeFingerSwipeRight,
+                    .fourFingerSwipeUp, .fourFingerSwipeDown, .fourFingerSwipeLeft, .fourFingerSwipeRight]
+                    .contains(gesture) {
+                    SwipeVelocityConfig(gesture: gesture)
+                        .id(gesture)
                 }
             }
 
@@ -468,5 +478,50 @@ struct ActionConfigView: View {
         var updated = action
         modify(&updated)
         appState.updateAction(in: trigger, action: updated)
+    }
+}
+
+struct SwipeVelocityConfig: View {
+    let gesture: TrackpadGesture
+    @State private var velocity: Double
+
+    private var defaultsKey: String { "GTTSwipeMinVelocity_\(gesture.rawValue)" }
+
+    init(gesture: TrackpadGesture) {
+        self.gesture = gesture
+        let stored = UserDefaults.standard.double(forKey: "GTTSwipeMinVelocity_\(gesture.rawValue)")
+        _velocity = State(initialValue: stored > 0 ? stored : 500)
+    }
+
+    var body: some View {
+        GroupBox("Swipe Sensitivity") {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("Min. velocity:")
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Text("\(Int(velocity)) pt/s")
+                        .font(.system(.body, design: .monospaced))
+                        .foregroundColor(.accentColor)
+                }
+                Slider(value: $velocity, in: 50...2000, step: 50)
+                    .onChange(of: velocity) { _, newValue in
+                        UserDefaults.standard.set(newValue, forKey: defaultsKey)
+                    }
+                HStack {
+                    Text("Any swipe")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Text("Fast flick only")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+                Text("Higher values require a faster flick, avoiding conflicts with normal scrolling.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(8)
+        }
     }
 }

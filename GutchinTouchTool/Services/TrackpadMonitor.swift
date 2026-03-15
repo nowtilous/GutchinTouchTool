@@ -93,7 +93,13 @@ class TrackpadMonitor {
     private var scrollDeltaX: CGFloat = 0
     private var scrollDeltaY: CGFloat = 0
     private var scrollFingerCount: Int = 0
+    private var scrollStartTime: Date?
     private let swipeThreshold: CGFloat = 50
+    // Minimum velocity (points/sec) for a swipe to fire — per-gesture, fast flick vs slow scroll
+    private func swipeMinVelocity(for gesture: TrackpadGesture) -> CGFloat {
+        let stored = UserDefaults.standard.double(forKey: "GTTSwipeMinVelocity_\(gesture.rawValue)")
+        return stored > 0 ? CGFloat(stored) : 500
+    }
 
     // Press-drag tracking
     private var pressDragDeltaX: CGFloat = 0
@@ -1068,6 +1074,7 @@ class TrackpadMonitor {
 
         if event.phase == .began || event.phase == .mayBegin {
             scrollDeltaX = 0; scrollDeltaY = 0
+            scrollStartTime = Date()
             // Use multitouch finger count (reliable) instead of event.touches() (empty for global monitors)
             scrollFingerCount = max(currentFingers, 2)
         }
@@ -1075,6 +1082,9 @@ class TrackpadMonitor {
         // Update finger count from multitouch if we missed .began
         if scrollFingerCount == 0 {
             scrollFingerCount = max(currentFingers, 2)
+        }
+        if scrollStartTime == nil {
+            scrollStartTime = Date()
         }
 
         scrollDeltaX += event.scrollingDeltaX
@@ -1087,8 +1097,12 @@ class TrackpadMonitor {
 
         if event.phase == .ended || event.phase == .cancelled {
             let absX = abs(scrollDeltaX); let absY = abs(scrollDeltaY)
-            guard absX > swipeThreshold || absY > swipeThreshold else {
-                scrollDeltaX = 0; scrollDeltaY = 0; scrollFingerCount = 0; return
+            let duration = Date().timeIntervalSince(scrollStartTime ?? Date())
+            let maxDelta = max(absX, absY)
+            let velocity = duration > 0 ? maxDelta / CGFloat(duration) : 0
+
+            guard maxDelta > swipeThreshold else {
+                scrollDeltaX = 0; scrollDeltaY = 0; scrollFingerCount = 0; scrollStartTime = nil; return
             }
             let gesture: TrackpadGesture?
             if absX > absY {
@@ -1096,8 +1110,14 @@ class TrackpadMonitor {
             } else {
                 gesture = swipeGesture(fingers: scrollFingerCount, direction: scrollDeltaY > 0 ? .up : .down)
             }
-            if let gesture = gesture { fireGesture(gesture) }
-            scrollDeltaX = 0; scrollDeltaY = 0; scrollFingerCount = 0
+            if let gesture = gesture {
+                let minVelocity = swipeMinVelocity(for: gesture)
+                if velocity >= minVelocity {
+                    GestureLog.shared.logFromAnyThread("Swipe velocity: \(Int(velocity)) pts/sec (min: \(Int(minVelocity)))", level: .detect)
+                    fireGesture(gesture)
+                }
+            }
+            scrollDeltaX = 0; scrollDeltaY = 0; scrollFingerCount = 0; scrollStartTime = nil
         }
     }
 
