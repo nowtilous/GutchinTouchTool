@@ -176,6 +176,7 @@ class AppState: ObservableObject {
     func importPreset(from url: URL) {
         if let preset = presetManager.importPreset(from: url) {
             currentPreset = preset
+            presetManager.save(preset)
             selectedAppTarget = preset.appTargets.first ?? .allApps
             selectedTrigger = nil
             selectedAction = nil

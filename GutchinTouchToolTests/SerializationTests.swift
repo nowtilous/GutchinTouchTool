@@ -158,6 +158,35 @@ final class SerializationTests: XCTestCase {
         XCTAssertNil(result)
     }
 
+    /// Verifies that importing a preset and saving it persists to disk,
+    /// so the config survives an app restart.
+    func testImportedPresetPersistsAfterSave() throws {
+        var preset = Preset(name: "Persist Test")
+        var t = Trigger(name: "Swipe", input: .trackpadGesture(.twoFingerSwipeLeft))
+        t.actions = [TriggerAction(actionType: .volumeUp)]
+        preset.addTrigger(t)
+
+        let manager = PresetManager()
+        let tmpURL = FileManager.default.temporaryDirectory.appendingPathComponent("persist_test_\(UUID().uuidString).json")
+        defer { try? FileManager.default.removeItem(at: tmpURL) }
+
+        // Export, then import (simulating what a friend receives)
+        manager.exportPreset(preset, to: tmpURL)
+        let imported = manager.importPreset(from: tmpURL)
+        XCTAssertNotNil(imported)
+
+        // Save the imported preset (this is the fix — import now persists)
+        manager.save(imported!)
+
+        // Load from disk as a fresh manager would on next launch
+        let reloaded = PresetManager.loadPreset()
+        XCTAssertNotNil(reloaded)
+        XCTAssertEqual(reloaded?.name, "Persist Test")
+        XCTAssertEqual(reloaded?.triggers.count, 1)
+        XCTAssertEqual(reloaded?.triggers.first?.name, "Swipe")
+        XCTAssertEqual(reloaded?.triggers.first?.actions.first?.actionType, .volumeUp)
+    }
+
     // MARK: - All gesture types are Codable
 
     func testAllTrackpadGesturesCodable() throws {
