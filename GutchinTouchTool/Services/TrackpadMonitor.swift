@@ -334,7 +334,8 @@ class TrackpadMonitor {
         currentFingers = activeFingersCount
 
         // --- TipTap detection ---
-        // TipTap = one finger holds, another taps. Sequence: 1→2→1 (or 1→2→0→1)
+        // TipTap = one finger PRESSES (clicks), another taps. Sequence: 1→2→1 (or 1→2→0→1)
+        // The resting finger must be pressing the trackpad down (force click)
 
         // Track 1-finger resting phase
         if activeFingersCount == 1 {
@@ -350,14 +351,15 @@ class TrackpadMonitor {
         // 1→2 transition: second finger just landed
         if activeFingersCount == 2 && previousFingers == 1 {
             twoFingerStartTime = Date()
-            // Was the single finger resting long enough?
-            if let restStart = oneFingerStartTime {
+            // Was the single finger resting long enough AND pressing the trackpad?
+            let isPressed = NSEvent.pressedMouseButtons & 0x1 != 0
+            if let restStart = oneFingerStartTime, isPressed {
                 let restDuration = Date().timeIntervalSince(restStart)
                 hadOneFingerRest = restDuration >= tipTapMinRestTime
                 if hadOneFingerRest {
                     tipTapPending = true
                     tipTapPendingTime = Date()
-                    // TipTap armed
+                    // TipTap armed (finger is pressed)
                 }
             } else {
                 hadOneFingerRest = false
