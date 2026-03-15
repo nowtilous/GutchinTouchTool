@@ -1066,10 +1066,15 @@ class TrackpadMonitor {
     private func handleScroll(_ event: NSEvent) {
         guard event.hasPreciseScrollingDeltas else { return }
 
-        if event.phase == .began {
+        if event.phase == .began || event.phase == .mayBegin {
             scrollDeltaX = 0; scrollDeltaY = 0
-            let touches = event.touches(matching: .touching, in: nil)
-            scrollFingerCount = max(touches.count, 2)
+            // Use multitouch finger count (reliable) instead of event.touches() (empty for global monitors)
+            scrollFingerCount = max(currentFingers, 2)
+        }
+
+        // Update finger count from multitouch if we missed .began
+        if scrollFingerCount == 0 {
+            scrollFingerCount = max(currentFingers, 2)
         }
 
         scrollDeltaX += event.scrollingDeltaX
@@ -1083,7 +1088,7 @@ class TrackpadMonitor {
         if event.phase == .ended || event.phase == .cancelled {
             let absX = abs(scrollDeltaX); let absY = abs(scrollDeltaY)
             guard absX > swipeThreshold || absY > swipeThreshold else {
-                scrollDeltaX = 0; scrollDeltaY = 0; return
+                scrollDeltaX = 0; scrollDeltaY = 0; scrollFingerCount = 0; return
             }
             let gesture: TrackpadGesture?
             if absX > absY {
@@ -1092,7 +1097,7 @@ class TrackpadMonitor {
                 gesture = swipeGesture(fingers: scrollFingerCount, direction: scrollDeltaY > 0 ? .up : .down)
             }
             if let gesture = gesture { fireGesture(gesture) }
-            scrollDeltaX = 0; scrollDeltaY = 0
+            scrollDeltaX = 0; scrollDeltaY = 0; scrollFingerCount = 0
         }
     }
 
