@@ -5,6 +5,7 @@ struct UpdateBadgeView: View {
     @State private var showingConfirmation = false
     @State private var pulsing = false
     @State private var borderPhase: CGFloat = 0
+    @State private var shimmerOffset: CGFloat = -1
 
     private var currentVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
@@ -39,6 +40,29 @@ struct UpdateBadgeView: View {
                             )
                         )
                 )
+                .overlay {
+                    if !isUpdateAvailable {
+                        GeometryReader { geo in
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(
+                                    .linearGradient(
+                                        stops: [
+                                            .init(color: .clear, location: 0),
+                                            .init(color: .white.opacity(0.35), location: 0.5),
+                                            .init(color: .clear, location: 1),
+                                        ],
+                                        startPoint: UnitPoint(x: shimmerOffset - 0.3, y: 0.5),
+                                        endPoint: UnitPoint(x: shimmerOffset + 0.3, y: 0.5)
+                                    )
+                                )
+                                .onAppear {
+                                    withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: false).delay(1.0)) {
+                                        shimmerOffset = 2
+                                    }
+                                }
+                        }
+                    }
+                }
                 .overlay {
                     if isUpdateAvailable {
                         RoundedRectangle(cornerRadius: 5)
