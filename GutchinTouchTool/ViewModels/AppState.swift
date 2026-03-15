@@ -43,6 +43,7 @@ class AppState: ObservableObject {
     private let presetManager = PresetManager()
     let keyboardMonitor = KeyboardMonitor()
     private let trackpadMonitor = TrackpadMonitor()
+    let updateChecker = UpdateChecker()
 
     init() {
         let preset = PresetManager.loadPreset() ?? Preset(name: "Master Preset", isMaster: true)
@@ -54,6 +55,7 @@ class AppState: ObservableObject {
         guard NSClassFromString("XCTestCase") == nil else { return }
         DispatchQueue.main.async {
             self.startMonitoring()
+            self.updateChecker.startPeriodicChecks()
         }
     }
 

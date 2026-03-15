@@ -72,21 +72,7 @@ struct MainWindow: View {
                 HStack(spacing: 8) {
                     Text("GutchinTouchTool")
                         .font(.headline)
-                    Text("v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0")")
-                        .font(.system(size: 11, weight: .bold, design: .monospaced))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(
-                                    .linearGradient(
-                                        colors: [.blue, .purple],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                        )
+                    UpdateBadgeView(updateChecker: appState.updateChecker)
                     Button(action: {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             appState.toggleGlobalEnabled()

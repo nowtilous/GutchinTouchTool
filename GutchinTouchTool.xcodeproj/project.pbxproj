@@ -8,36 +8,39 @@
 
 /* Begin PBXBuildFile section */
 		019B9C7BA352AFC84AD954BB /* TrackpadPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1205874DEC0ED25A5E28FD /* TrackpadPipelineTests.swift */; };
-		AA1122334455667788990011 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1122334455667788990011 /* ModelTests.swift */; };
-		AA2233445566778899001122 /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2233445566778899001122 /* SerializationTests.swift */; };
-		AA3344556677889900112233 /* LiveTouchStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3344556677889900112233 /* LiveTouchStateTests.swift */; };
-		AA4455667788990011223344 /* GestureStatisticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4455667788990011223344 /* GestureStatisticsTests.swift */; };
 		047BD176EA8475D2CB843670 /* GestureConsoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835804504535BFFF0A615239 /* GestureConsoleView.swift */; };
-		982231941044009309851310 /* GesturePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231238745317203595814545 /* GesturePreviewView.swift */; };
-		D1E2F3A4B5C60718293A4B5C /* LiveTouchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5C /* LiveTouchState.swift */; };
-		E1F2A3B4C5D60718293A4B5C /* LiveTouchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B5C /* LiveTouchView.swift */; };
+		085BDE863012A0C9B909B12F /* SerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1386A246B233DDEA04412DD /* SerializationTests.swift */; };
 		19F61F782EE805CF7F5F3014 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1C96664AFA27E00FA324A5 /* AppState.swift */; };
+		1E6638C7E5B56166D088EDF8 /* LiveTouchStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8227FAB56F6241BC254B8F39 /* LiveTouchStateTests.swift */; };
+		29047DB47C87A598D5B2C7AA /* GesturePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C08CE86620F4B0C189D972 /* GesturePreviewView.swift */; };
+		292988165B087AE2F13D8FBF /* GestureStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCB323AE23F489A226BDB8E /* GestureStatistics.swift */; };
+		312196054CDAE9C39FFA36E7 /* LiveTouchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC5C0798FDA46AF8AA0B5D4 /* LiveTouchView.swift */; };
 		4FCDFEF6108186D33C545E18 /* AppTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86395DA53EC150134A65426C /* AppTarget.swift */; };
 		52C199558636E32D42A6EE0C /* TrackpadMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9277918E0700B4DF497CC63A /* TrackpadMonitor.swift */; };
 		55F610E7C9360B6C61D064E4 /* TriggerListPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9AA128B0872E58AF518488 /* TriggerListPanel.swift */; };
 		5A8F422110A23E9ED97A3EF4 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F07B761A4890A129778071 /* WindowManager.swift */; };
 		5CFF9E4308528010D641FB27 /* LogSidePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455785A555FBE4C61B590D01 /* LogSidePanel.swift */; };
 		603D6FCF4F48391C35B93546 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF557E7C62CB384D2603CF41 /* AppDelegate.swift */; };
+		6230CBEEB77C284A731579F3 /* UpdateCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C612017BFB150EB1A6D167 /* UpdateCheckerTests.swift */; };
+		6E8E724EA25EF3B1D485E62D /* UpdateBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FE18BAF9F9FEC05A40B6F2 /* UpdateBadgeView.swift */; };
+		71277C1FBC48775A8A72FD72 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A2593070526ABC2E757364 /* ModelTests.swift */; };
 		8F56617241408E093C881A1A /* GestureLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591388447B863AB1271B38FE /* GestureLog.swift */; };
 		903BFC8E7D8AD82702A59CE0 /* Trigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80BACC55ACE7DF1BF21705C /* Trigger.swift */; };
 		93A2106594D8B52D8E09F752 /* TriggerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0583DD6C77ADF7E2D5EA71E7 /* TriggerType.swift */; };
 		9A629E874BAE24B6D987B05A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70C26620895E16B05C76A98E /* Assets.xcassets */; };
+		9E53BC384C94CA4A3D8D56F8 /* LiveTouchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3C027AD294C36B6A5BE3CF /* LiveTouchState.swift */; };
 		A5DCAC912D1304E73F9958ED /* ActionExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB054EA1A8A7A5690A40B7D /* ActionExecutor.swift */; };
 		A81D2DD39D9C38F691EA8061 /* AppSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506189193F0CED5175427042 /* AppSidebar.swift */; };
 		AF52A804BBFA16C53BA10949 /* Preset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38683DC37492332DC1942B49 /* Preset.swift */; };
 		BAB81AC773B591DF8C84716F /* KeyboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */; };
+		BAB8ACAE12BE2DA856CBFD4E /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB2F47B2A8F6BC6D885F30A /* UpdateChecker.swift */; };
+		C66E392ED8FC85D95FEE5E5E /* GestureStatisticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79762574A5108174D57BC923 /* GestureStatisticsTests.swift */; };
 		C7665F020EFF44DD35CA065A /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DC958E2E845E35D6977C14 /* MainWindow.swift */; };
 		CAABE3329FC3CA4FCD5B2688 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C98385A38C1DA1F1848DCE /* Action.swift */; };
 		D253B7A0E38D382E3DD92932 /* ActionListPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AF0ADA1620D8A2021D60F5 /* ActionListPanel.swift */; };
 		DBAE98A258656174646D15F7 /* PresetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC1E20528882B20DA9398F5 /* PresetManager.swift */; };
+		E0E0722811CA1F5A4C7B0B8F /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C1FB2419A3A14EB6F995F /* StatisticsView.swift */; };
 		E2128A12EA0C8CE46B2A4945 /* GutchinTouchToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015C76C28717C9F0481DE62D /* GutchinTouchToolApp.swift */; };
-		CC1122334455667788990011 /* GestureStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1122334455667788990011 /* GestureStatistics.swift */; };
-		CC2233445566778899001122 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2233445566778899001122 /* StatisticsView.swift */; };
 		E4D58A8D6926A8E4B601C460 /* ConfigurationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AF6CD7F63515AC7907609D /* ConfigurationPanel.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,10 +58,7 @@
 		015C76C28717C9F0481DE62D /* GutchinTouchToolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GutchinTouchToolApp.swift; sourceTree = "<group>"; };
 		0583DD6C77ADF7E2D5EA71E7 /* TriggerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerType.swift; sourceTree = "<group>"; };
 		1C1205874DEC0ED25A5E28FD /* TrackpadPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadPipelineTests.swift; sourceTree = "<group>"; };
-		BB1122334455667788990011 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
-		BB2233445566778899001122 /* SerializationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializationTests.swift; sourceTree = "<group>"; };
-		BB3344556677889900112233 /* LiveTouchStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchStateTests.swift; sourceTree = "<group>"; };
-		BB4455667788990011223344 /* GestureStatisticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureStatisticsTests.swift; sourceTree = "<group>"; };
+		20C08CE86620F4B0C189D972 /* GesturePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturePreviewView.swift; sourceTree = "<group>"; };
 		26864A407E082224513C0272 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		33C98385A38C1DA1F1848DCE /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		38683DC37492332DC1942B49 /* Preset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preset.swift; sourceTree = "<group>"; };
@@ -66,27 +66,33 @@
 		3F9AA128B0872E58AF518488 /* TriggerListPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerListPanel.swift; sourceTree = "<group>"; };
 		455785A555FBE4C61B590D01 /* LogSidePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogSidePanel.swift; sourceTree = "<group>"; };
 		480F59657C30BBA39ED8E388 /* GutchinTouchToolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GutchinTouchToolTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B3C027AD294C36B6A5BE3CF /* LiveTouchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchState.swift; sourceTree = "<group>"; };
 		506189193F0CED5175427042 /* AppSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSidebar.swift; sourceTree = "<group>"; };
+		51A2593070526ABC2E757364 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 		52DC958E2E845E35D6977C14 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		591388447B863AB1271B38FE /* GestureLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureLog.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F60718293A4B5C /* LiveTouchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchState.swift; sourceTree = "<group>"; };
-		F1A2B3C4D5E60718293A4B5C /* LiveTouchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchView.swift; sourceTree = "<group>"; };
 		5E1C96664AFA27E00FA324A5 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		70C26620895E16B05C76A98E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		75C612017BFB150EB1A6D167 /* UpdateCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCheckerTests.swift; sourceTree = "<group>"; };
+		79762574A5108174D57BC923 /* GestureStatisticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureStatisticsTests.swift; sourceTree = "<group>"; };
 		7DC1E20528882B20DA9398F5 /* PresetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetManager.swift; sourceTree = "<group>"; };
+		7E8C1FB2419A3A14EB6F995F /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		8227FAB56F6241BC254B8F39 /* LiveTouchStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchStateTests.swift; sourceTree = "<group>"; };
 		835804504535BFFF0A615239 /* GestureConsoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureConsoleView.swift; sourceTree = "<group>"; };
-		231238745317203595814545 /* GesturePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturePreviewView.swift; sourceTree = "<group>"; };
 		86395DA53EC150134A65426C /* AppTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTarget.swift; sourceTree = "<group>"; };
 		9277918E0700B4DF497CC63A /* TrackpadMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadMonitor.swift; sourceTree = "<group>"; };
 		95AF6CD7F63515AC7907609D /* ConfigurationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPanel.swift; sourceTree = "<group>"; };
 		A1F07B761A4890A129778071 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardMonitor.swift; sourceTree = "<group>"; };
+		ADCB323AE23F489A226BDB8E /* GestureStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureStatistics.swift; sourceTree = "<group>"; };
 		B6AF0ADA1620D8A2021D60F5 /* ActionListPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionListPanel.swift; sourceTree = "<group>"; };
+		BAC5C0798FDA46AF8AA0B5D4 /* LiveTouchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchView.swift; sourceTree = "<group>"; };
 		BE0D11D3DF027F5FA85DFF70 /* GutchinTouchTool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GutchinTouchTool.entitlements; sourceTree = "<group>"; };
 		BFBEC8838C761C0A2C708534 /* GutchinTouchTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GutchinTouchTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0FE18BAF9F9FEC05A40B6F2 /* UpdateBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateBadgeView.swift; sourceTree = "<group>"; };
+		CDB2F47B2A8F6BC6D885F30A /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
 		CF557E7C62CB384D2603CF41 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		DD1122334455667788990011 /* GestureStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureStatistics.swift; sourceTree = "<group>"; };
-		DD2233445566778899001122 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		F1386A246B233DDEA04412DD /* SerializationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializationTests.swift; sourceTree = "<group>"; };
 		F80BACC55ACE7DF1BF21705C /* Trigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trigger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,11 +102,12 @@
 			children = (
 				3DB054EA1A8A7A5690A40B7D /* ActionExecutor.swift */,
 				591388447B863AB1271B38FE /* GestureLog.swift */,
-				DD1122334455667788990011 /* GestureStatistics.swift */,
+				ADCB323AE23F489A226BDB8E /* GestureStatistics.swift */,
 				A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */,
-				A1B2C3D4E5F60718293A4B5C /* LiveTouchState.swift */,
+				4B3C027AD294C36B6A5BE3CF /* LiveTouchState.swift */,
 				7DC1E20528882B20DA9398F5 /* PresetManager.swift */,
 				9277918E0700B4DF497CC63A /* TrackpadMonitor.swift */,
+				CDB2F47B2A8F6BC6D885F30A /* UpdateChecker.swift */,
 				A1F07B761A4890A129778071 /* WindowManager.swift */,
 			);
 			path = Services;
@@ -113,12 +120,13 @@
 				506189193F0CED5175427042 /* AppSidebar.swift */,
 				95AF6CD7F63515AC7907609D /* ConfigurationPanel.swift */,
 				835804504535BFFF0A615239 /* GestureConsoleView.swift */,
-				231238745317203595814545 /* GesturePreviewView.swift */,
-				F1A2B3C4D5E60718293A4B5C /* LiveTouchView.swift */,
+				20C08CE86620F4B0C189D972 /* GesturePreviewView.swift */,
+				BAC5C0798FDA46AF8AA0B5D4 /* LiveTouchView.swift */,
 				455785A555FBE4C61B590D01 /* LogSidePanel.swift */,
 				52DC958E2E845E35D6977C14 /* MainWindow.swift */,
-				DD2233445566778899001122 /* StatisticsView.swift */,
+				7E8C1FB2419A3A14EB6F995F /* StatisticsView.swift */,
 				3F9AA128B0872E58AF518488 /* TriggerListPanel.swift */,
+				C0FE18BAF9F9FEC05A40B6F2 /* UpdateBadgeView.swift */,
 				B08BDB7EF3EDE9A433BDABF5 /* Components */,
 			);
 			path = Views;
@@ -196,11 +204,12 @@
 		D93F5FB07B64002E57D148E0 /* GutchinTouchToolTests */ = {
 			isa = PBXGroup;
 			children = (
+				79762574A5108174D57BC923 /* GestureStatisticsTests.swift */,
+				8227FAB56F6241BC254B8F39 /* LiveTouchStateTests.swift */,
+				51A2593070526ABC2E757364 /* ModelTests.swift */,
+				F1386A246B233DDEA04412DD /* SerializationTests.swift */,
 				1C1205874DEC0ED25A5E28FD /* TrackpadPipelineTests.swift */,
-				BB1122334455667788990011 /* ModelTests.swift */,
-				BB2233445566778899001122 /* SerializationTests.swift */,
-				BB3344556677889900112233 /* LiveTouchStateTests.swift */,
-				BB4455667788990011223344 /* GestureStatisticsTests.swift */,
+				75C612017BFB150EB1A6D167 /* UpdateCheckerTests.swift */,
 			);
 			path = GutchinTouchToolTests;
 			sourceTree = "<group>";
@@ -325,22 +334,24 @@
 				4FCDFEF6108186D33C545E18 /* AppTarget.swift in Sources */,
 				E4D58A8D6926A8E4B601C460 /* ConfigurationPanel.swift in Sources */,
 				047BD176EA8475D2CB843670 /* GestureConsoleView.swift in Sources */,
-				982231941044009309851310 /* GesturePreviewView.swift in Sources */,
 				8F56617241408E093C881A1A /* GestureLog.swift in Sources */,
-				CC1122334455667788990011 /* GestureStatistics.swift in Sources */,
-				CC2233445566778899001122 /* StatisticsView.swift in Sources */,
-				D1E2F3A4B5C60718293A4B5C /* LiveTouchState.swift in Sources */,
-				E1F2A3B4C5D60718293A4B5C /* LiveTouchView.swift in Sources */,
+				29047DB47C87A598D5B2C7AA /* GesturePreviewView.swift in Sources */,
+				292988165B087AE2F13D8FBF /* GestureStatistics.swift in Sources */,
 				E2128A12EA0C8CE46B2A4945 /* GutchinTouchToolApp.swift in Sources */,
 				BAB81AC773B591DF8C84716F /* KeyboardMonitor.swift in Sources */,
+				9E53BC384C94CA4A3D8D56F8 /* LiveTouchState.swift in Sources */,
+				312196054CDAE9C39FFA36E7 /* LiveTouchView.swift in Sources */,
 				5CFF9E4308528010D641FB27 /* LogSidePanel.swift in Sources */,
 				C7665F020EFF44DD35CA065A /* MainWindow.swift in Sources */,
 				AF52A804BBFA16C53BA10949 /* Preset.swift in Sources */,
 				DBAE98A258656174646D15F7 /* PresetManager.swift in Sources */,
+				E0E0722811CA1F5A4C7B0B8F /* StatisticsView.swift in Sources */,
 				52C199558636E32D42A6EE0C /* TrackpadMonitor.swift in Sources */,
 				903BFC8E7D8AD82702A59CE0 /* Trigger.swift in Sources */,
 				55F610E7C9360B6C61D064E4 /* TriggerListPanel.swift in Sources */,
 				93A2106594D8B52D8E09F752 /* TriggerType.swift in Sources */,
+				6E8E724EA25EF3B1D485E62D /* UpdateBadgeView.swift in Sources */,
+				BAB8ACAE12BE2DA856CBFD4E /* UpdateChecker.swift in Sources */,
 				5A8F422110A23E9ED97A3EF4 /* WindowManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -349,11 +360,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C66E392ED8FC85D95FEE5E5E /* GestureStatisticsTests.swift in Sources */,
+				1E6638C7E5B56166D088EDF8 /* LiveTouchStateTests.swift in Sources */,
+				71277C1FBC48775A8A72FD72 /* ModelTests.swift in Sources */,
+				085BDE863012A0C9B909B12F /* SerializationTests.swift in Sources */,
 				019B9C7BA352AFC84AD954BB /* TrackpadPipelineTests.swift in Sources */,
-				AA1122334455667788990011 /* ModelTests.swift in Sources */,
-				AA2233445566778899001122 /* SerializationTests.swift in Sources */,
-				AA3344556677889900112233 /* LiveTouchStateTests.swift in Sources */,
-				AA4455667788990011223344 /* GestureStatisticsTests.swift in Sources */,
+				6230CBEEB77C284A731579F3 /* UpdateCheckerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
