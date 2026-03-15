@@ -12,6 +12,7 @@ struct GutchinTouchToolApp: App {
                 .tint(appState.accentColorChoice.color)
                 .frame(minWidth: 1300, minHeight: 650)
                 .task {
+                    appDelegate.appState = appState
                     appState.startMonitoring()
                     appDelegate.onReady = { [appState] in
                         appState.startMonitoring()
