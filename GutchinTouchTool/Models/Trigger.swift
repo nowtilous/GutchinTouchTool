@@ -36,6 +36,7 @@ struct Trigger: Identifiable, Codable, Hashable {
     var isEnabled: Bool
     var appBundleID: String? // nil means global (All Apps)
     var order: Int
+    var suppressClick: Bool
 
     init(name: String, input: TriggerInput, appBundleID: String? = nil) {
         self.id = UUID()
@@ -45,6 +46,23 @@ struct Trigger: Identifiable, Codable, Hashable {
         self.isEnabled = true
         self.appBundleID = appBundleID
         self.order = 0
+        self.suppressClick = false
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, input, actions, isEnabled, appBundleID, order, suppressClick
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        input = try container.decode(TriggerInput.self, forKey: .input)
+        actions = try container.decode([TriggerAction].self, forKey: .actions)
+        isEnabled = try container.decode(Bool.self, forKey: .isEnabled)
+        appBundleID = try container.decodeIfPresent(String.self, forKey: .appBundleID)
+        order = try container.decode(Int.self, forKey: .order)
+        suppressClick = try container.decodeIfPresent(Bool.self, forKey: .suppressClick) ?? false
     }
 
     var displayName: String {

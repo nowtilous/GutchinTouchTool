@@ -85,9 +85,15 @@ private let touchCallback: MTContactCallbackFunction = { device, touchesPtr, num
 
 class TrackpadMonitor {
     private var monitors: [Any] = []
-    private var registeredTriggers: [(id: UUID, gesture: TrackpadGesture, actions: [TriggerAction], appBundleID: String?)] = []
+    private var registeredTriggers: [(id: UUID, gesture: TrackpadGesture, actions: [TriggerAction], appBundleID: String?, suppressClick: Bool)] = []
     private var devices: [MTDeviceRef] = []
     private var multitouchActive = false
+
+    // Click suppression via CGEventTap
+    private var clickSuppressEventTap: CFMachPort?
+    private var clickSuppressRunLoopSource: CFRunLoopSource?
+    private static var pendingSuppressClick = false
+    private static var activeTrackpadMonitor: TrackpadMonitor?
 
     // Swipe tracking
     private var scrollDeltaX: CGFloat = 0
@@ -190,7 +196,7 @@ class TrackpadMonitor {
 
         for trigger in trackpadTriggers {
             if case .trackpadGesture(let gesture) = trigger.input {
-                registeredTriggers.append((id: trigger.id, gesture: gesture, actions: trigger.actions, appBundleID: trigger.appBundleID))
+                registeredTriggers.append((id: trigger.id, gesture: gesture, actions: trigger.actions, appBundleID: trigger.appBundleID, suppressClick: trigger.suppressClick))
             }
         }
 
@@ -198,6 +204,7 @@ class TrackpadMonitor {
 
         setupNSEventMonitors()
         setupMultitouchMonitoring()
+        setupClickSuppressionTap()
 
         NSLog("[TrackpadMonitor] Registered %d gesture triggers", registeredTriggers.count)
     }
@@ -1167,6 +1174,140 @@ class TrackpadMonitor {
         }
     }
 
+    // MARK: - Click Suppression CGEventTap
+
+    private func setupClickSuppressionTap() {
+        // Only set up if any registered trigger has suppressClick enabled
+        guard registeredTriggers.contains(where: { $0.suppressClick }) else { return }
+
+        TrackpadMonitor.activeTrackpadMonitor = self
+
+        let eventMask: CGEventMask =
+            (1 << CGEventType.leftMouseDown.rawValue) |
+            (1 << CGEventType.leftMouseUp.rawValue)
+
+        let callback: CGEventTapCallBack = { proxy, type, event, refcon -> Unmanaged<CGEvent>? in
+            guard let monitor = TrackpadMonitor.activeTrackpadMonitor else {
+                return Unmanaged.passRetained(event)
+            }
+
+            if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
+                if let tap = monitor.clickSuppressEventTap {
+                    CGEvent.tapEnable(tap: tap, enable: true)
+                }
+                return Unmanaged.passRetained(event)
+            }
+
+            // Skip events posted by our own ActionExecutor
+            if event.getIntegerValueField(.eventSourceUserData) == 0x475454 {
+                return Unmanaged.passRetained(event)
+            }
+
+            // On mouseUp, clear suppression state
+            if type == .leftMouseUp && TrackpadMonitor.pendingSuppressClick {
+                TrackpadMonitor.pendingSuppressClick = false
+                return nil // swallow the up too
+            }
+
+            // On mouseDown, check if a click-based gesture with suppressClick will fire
+            if type == .leftMouseDown {
+                if let gesture = monitor.clickGestureToSuppress() {
+                    TrackpadMonitor.pendingSuppressClick = true
+                    // Fire the gesture since the NSEvent handler won't see this click
+                    DispatchQueue.main.async {
+                        monitor.fireGesture(gesture)
+                    }
+                    return nil // swallow
+                }
+            }
+
+            return Unmanaged.passRetained(event)
+        }
+
+        clickSuppressEventTap = CGEvent.tapCreate(
+            tap: .cgSessionEventTap,
+            place: .headInsertEventTap,
+            options: .defaultTap,
+            eventsOfInterest: eventMask,
+            callback: callback,
+            userInfo: nil
+        )
+
+        if let tap = clickSuppressEventTap {
+            clickSuppressRunLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
+            if let source = clickSuppressRunLoopSource {
+                CFRunLoopAddSource(CFRunLoopGetCurrent(), source, .commonModes)
+                CGEvent.tapEnable(tap: tap, enable: true)
+            }
+        } else {
+            NSLog("[TrackpadMonitor] Failed to create click suppression CGEventTap")
+        }
+    }
+
+    /// Returns the click gesture to suppress if the current trackpad state matches a registered
+    /// click gesture that has suppressClick enabled, or nil if no suppression should happen.
+    private func clickGestureToSuppress() -> TrackpadGesture? {
+        let globalEnabled = UserDefaults.standard.object(forKey: "GTTGlobalEnabled") as? Bool ?? true
+        guard globalEnabled else { return nil }
+
+        // Determine which gesture would fire based on finger count and position
+        let gesture: TrackpadGesture?
+        if currentFingers == 1, let pos = lastSingleFingerPos {
+            let x = pos.x
+            let y = pos.y
+            let cornerW: Float = 0.12
+            let cornerH: Float = 0.12
+            let middleH: Float = 0.20
+
+            if x < cornerW && y > (1 - cornerH) {
+                gesture = .cornerClickTopLeft
+            } else if x > (1 - cornerW) && y > (1 - cornerH) {
+                gesture = .cornerClickTopRight
+            } else if x < cornerW && y < cornerH {
+                gesture = .cornerClickBottomLeft
+            } else if x > (1 - cornerW) && y < cornerH {
+                gesture = .cornerClickBottomRight
+            } else if y > (1 - middleH) {
+                gesture = .middleClickTop
+            } else if y < middleH {
+                gesture = .middleClickBottom
+            } else {
+                gesture = nil
+            }
+        } else if currentFingers == 2 {
+            gesture = .twoFingerClick
+        } else if currentFingers == 3 {
+            gesture = .threeFingerClick
+        } else {
+            gesture = nil
+        }
+
+        guard let gesture = gesture else { return nil }
+
+        let frontBundleID = NSWorkspace.shared.frontmostApplication?.bundleIdentifier
+        let matching = registeredTriggers.filter { $0.gesture == gesture && $0.suppressClick }
+        let appSpecific = matching.filter { $0.appBundleID != nil && $0.appBundleID == frontBundleID }
+        let global = matching.filter { $0.appBundleID == nil }
+        let toSuppress = appSpecific.isEmpty ? global : appSpecific
+
+        return toSuppress.isEmpty ? nil : gesture
+    }
+
+    private func tearDownClickSuppressionTap() {
+        if let tap = clickSuppressEventTap {
+            CGEvent.tapEnable(tap: tap, enable: false)
+            clickSuppressEventTap = nil
+        }
+        if let source = clickSuppressRunLoopSource {
+            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, .commonModes)
+            clickSuppressRunLoopSource = nil
+        }
+        if TrackpadMonitor.activeTrackpadMonitor === self {
+            TrackpadMonitor.activeTrackpadMonitor = nil
+        }
+        TrackpadMonitor.pendingSuppressClick = false
+    }
+
     // MARK: - Fire
 
     private func fireGesture(_ gesture: TrackpadGesture) {
@@ -1214,6 +1355,7 @@ class TrackpadMonitor {
     }
 
     func unregisterAll() {
+        tearDownClickSuppressionTap()
         for monitor in monitors {
             NSEvent.removeMonitor(monitor)
         }

@@ -89,6 +89,29 @@ enum MouseButton: String, CaseIterable, Identifiable, Codable {
     case button7 = "Button 7"
 
     var id: String { rawValue }
+
+    /// The CGEvent button number (0-indexed: button3 = 2, button4 = 3, etc.)
+    var cgButtonNumber: Int64 {
+        switch self {
+        case .button3: return 2
+        case .button4: return 3
+        case .button5: return 4
+        case .button6: return 5
+        case .button7: return 6
+        }
+    }
+
+    /// Create from a CGEvent mouse button number
+    static func from(cgButton: Int64) -> MouseButton? {
+        switch cgButton {
+        case 2: return .button3
+        case 3: return .button4
+        case 4: return .button5
+        case 5: return .button6
+        case 6: return .button7
+        default: return nil
+        }
+    }
 }
 
 struct KeyboardShortcut: Codable, Equatable, Hashable {

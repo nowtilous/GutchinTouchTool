@@ -32,6 +32,7 @@
 		A5DCAC912D1304E73F9958ED /* ActionExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB054EA1A8A7A5690A40B7D /* ActionExecutor.swift */; };
 		A81D2DD39D9C38F691EA8061 /* AppSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506189193F0CED5175427042 /* AppSidebar.swift */; };
 		AF52A804BBFA16C53BA10949 /* Preset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38683DC37492332DC1942B49 /* Preset.swift */; };
+		B1A2C3D4E5F60718293A4B5C /* MouseButtonMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6071829A3B4C5D6E7F8 /* MouseButtonMonitor.swift */; };
 		BAB81AC773B591DF8C84716F /* KeyboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */; };
 		BAB8ACAE12BE2DA856CBFD4E /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB2F47B2A8F6BC6D885F30A /* UpdateChecker.swift */; };
 		C66E392ED8FC85D95FEE5E5E /* GestureStatisticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79762574A5108174D57BC923 /* GestureStatisticsTests.swift */; };
@@ -84,6 +85,7 @@
 		95AF6CD7F63515AC7907609D /* ConfigurationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPanel.swift; sourceTree = "<group>"; };
 		A1F07B761A4890A129778071 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardMonitor.swift; sourceTree = "<group>"; };
+		D4E5F6071829A3B4C5D6E7F8 /* MouseButtonMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseButtonMonitor.swift; sourceTree = "<group>"; };
 		ADCB323AE23F489A226BDB8E /* GestureStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureStatistics.swift; sourceTree = "<group>"; };
 		B6AF0ADA1620D8A2021D60F5 /* ActionListPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionListPanel.swift; sourceTree = "<group>"; };
 		BAC5C0798FDA46AF8AA0B5D4 /* LiveTouchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTouchView.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				ADCB323AE23F489A226BDB8E /* GestureStatistics.swift */,
 				A502B75871E60C25D91C35C8 /* KeyboardMonitor.swift */,
 				4B3C027AD294C36B6A5BE3CF /* LiveTouchState.swift */,
+				D4E5F6071829A3B4C5D6E7F8 /* MouseButtonMonitor.swift */,
 				7DC1E20528882B20DA9398F5 /* PresetManager.swift */,
 				9277918E0700B4DF497CC63A /* TrackpadMonitor.swift */,
 				CDB2F47B2A8F6BC6D885F30A /* UpdateChecker.swift */,
@@ -343,6 +346,7 @@
 				312196054CDAE9C39FFA36E7 /* LiveTouchView.swift in Sources */,
 				5CFF9E4308528010D641FB27 /* LogSidePanel.swift in Sources */,
 				C7665F020EFF44DD35CA065A /* MainWindow.swift in Sources */,
+				B1A2C3D4E5F60718293A4B5C /* MouseButtonMonitor.swift in Sources */,
 				AF52A804BBFA16C53BA10949 /* Preset.swift in Sources */,
 				DBAE98A258656174646D15F7 /* PresetManager.swift in Sources */,
 				E0E0722811CA1F5A4C7B0B8F /* StatisticsView.swift in Sources */,

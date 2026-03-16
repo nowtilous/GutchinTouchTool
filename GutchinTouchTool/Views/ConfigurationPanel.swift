@@ -135,6 +135,26 @@ struct TriggerConfigView: View {
                 }
             }
 
+            // Click suppression for mouse buttons and click-based trackpad gestures
+            if isClickBasedTrigger(trigger) {
+                GroupBox("Click Suppression") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Toggle("Suppress click pass-through", isOn: Binding(
+                            get: { trigger.suppressClick },
+                            set: { newValue in
+                                var updated = trigger
+                                updated.suppressClick = newValue
+                                appState.updateTrigger(updated)
+                            }
+                        ))
+                        Text("When enabled, the click will not be sent to the foreground application — only the mapped actions will fire.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(8)
+                }
+            }
+
             // Gesture animation preview
             if case .trackpadGesture(let gesture) = trigger.input {
                 GesturePreviewView(gesture: gesture)
@@ -222,6 +242,21 @@ struct TriggerConfigView: View {
 
             Spacer()
         }
+    }
+
+    private func isClickBasedTrigger(_ trigger: Trigger) -> Bool {
+        if case .mouseButton = trigger.input { return true }
+        if case .trackpadGesture(let gesture) = trigger.input {
+            let clickGestures: [TrackpadGesture] = [
+                .twoFingerClick, .threeFingerClick, .twoFingerTap, .twoFingerDoubleTap,
+                .threeFingerTap, .fourFingerTap, .fiveFingerTap,
+                .cornerClickTopLeft, .cornerClickTopRight,
+                .cornerClickBottomLeft, .cornerClickBottomRight,
+                .middleClickTop, .middleClickBottom,
+            ]
+            return clickGestures.contains(gesture)
+        }
+        return false
     }
 }
 

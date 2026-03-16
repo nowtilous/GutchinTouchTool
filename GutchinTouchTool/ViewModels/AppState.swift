@@ -43,6 +43,7 @@ class AppState: ObservableObject {
     private let presetManager = PresetManager()
     let keyboardMonitor = KeyboardMonitor()
     private let trackpadMonitor = TrackpadMonitor()
+    private let mouseButtonMonitor = MouseButtonMonitor()
     let updateChecker = UpdateChecker()
 
     init() {
@@ -162,6 +163,7 @@ class AppState: ObservableObject {
         NSLog("[GTT] Refreshing monitors with %d enabled triggers (global: %@)", allTriggers.count, globalEnabled ? "ON" : "OFF")
         keyboardMonitor.registerTriggers(allTriggers)
         trackpadMonitor.registerTriggers(allTriggers)
+        mouseButtonMonitor.registerTriggers(allTriggers)
     }
 
     // MARK: - Persistence
