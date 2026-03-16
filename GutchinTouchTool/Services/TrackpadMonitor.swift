@@ -1177,14 +1177,16 @@ class TrackpadMonitor {
     // MARK: - Click Suppression CGEventTap
 
     private func setupClickSuppressionTap() {
-        // Only set up if any registered trigger has suppressClick enabled
-        guard registeredTriggers.contains(where: { $0.suppressClick }) else { return }
+        let suppressCount = registeredTriggers.filter({ $0.suppressClick }).count
+        guard suppressCount > 0 else { return }
 
         TrackpadMonitor.activeTrackpadMonitor = self
 
         let eventMask: CGEventMask =
             (1 << CGEventType.leftMouseDown.rawValue) |
-            (1 << CGEventType.leftMouseUp.rawValue)
+            (1 << CGEventType.leftMouseUp.rawValue) |
+            (1 << CGEventType.leftMouseDragged.rawValue) |
+            (1 << 29) /* NSEvent.EventType.pressure */
 
         let callback: CGEventTapCallBack = { proxy, type, event, refcon -> Unmanaged<CGEvent>? in
             guard let monitor = TrackpadMonitor.activeTrackpadMonitor else {
@@ -1203,17 +1205,18 @@ class TrackpadMonitor {
                 return Unmanaged.passRetained(event)
             }
 
-            // On mouseUp, clear suppression state
-            if type == .leftMouseUp && TrackpadMonitor.pendingSuppressClick {
-                TrackpadMonitor.pendingSuppressClick = false
-                return nil // swallow the up too
+            // While suppressing, swallow all related events until mouseUp
+            if TrackpadMonitor.pendingSuppressClick {
+                if type == .leftMouseUp {
+                    TrackpadMonitor.pendingSuppressClick = false
+                }
+                return nil // swallow up, drag, and pressure events during suppression
             }
 
             // On mouseDown, check if a click-based gesture with suppressClick will fire
             if type == .leftMouseDown {
                 if let gesture = monitor.clickGestureToSuppress() {
                     TrackpadMonitor.pendingSuppressClick = true
-                    // Fire the gesture since the NSEvent handler won't see this click
                     DispatchQueue.main.async {
                         monitor.fireGesture(gesture)
                     }
@@ -1240,7 +1243,7 @@ class TrackpadMonitor {
                 CGEvent.tapEnable(tap: tap, enable: true)
             }
         } else {
-            NSLog("[TrackpadMonitor] Failed to create click suppression CGEventTap")
+            NSLog("[TrackpadMonitor] Failed to create click suppression CGEventTap — Accessibility permission required")
         }
     }
 
