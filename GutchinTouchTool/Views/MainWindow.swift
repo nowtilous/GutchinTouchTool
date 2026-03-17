@@ -6,6 +6,7 @@ struct MainWindow: View {
     @State private var showLog = true
     @State private var showTouchVisualizer = true
     @AppStorage("GTTAppearance") private var appearance: String = "dark"
+    @Environment(\.openSettings) private var openSettingsAction
 
     private var isDark: Bool { appearance == "dark" }
 
@@ -106,12 +107,7 @@ struct MainWindow: View {
                     Label("Console", systemImage: "terminal.fill")
                         .foregroundStyle(showLog ? .green : .secondary)
                 }
-                Button(action: { exportPreset() }) {
-                    Label("Export", systemImage: "square.and.arrow.up")
-                }
-                Button(action: { importPreset() }) {
-                    Label("Import", systemImage: "square.and.arrow.down")
-                }
+
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         appearance = isDark ? "light" : "dark"
@@ -120,29 +116,18 @@ struct MainWindow: View {
                     Label("Appearance", systemImage: isDark ? "moon.fill" : "sun.max.fill")
                         .foregroundStyle(isDark ? .indigo : .yellow)
                 }
+                Button(action: {
+                    openSettings()
+                }) {
+                    Label("Settings", systemImage: "gearshape.fill")
+                }
+                .help("App Settings")
             }
         }
         .preferredColorScheme(appearance == "system" ? nil : (isDark ? .dark : .light))
     }
 
-    private func exportPreset() {
-        let panel = NSSavePanel()
-        panel.allowedContentTypes = [.json]
-        panel.nameFieldStringValue = "\(appState.currentPreset.name).bttpreset"
-        panel.begin { response in
-            if response == .OK, let url = panel.url {
-                appState.exportPreset(to: url)
-            }
-        }
-    }
-
-    private func importPreset() {
-        let panel = NSOpenPanel()
-        panel.allowedContentTypes = [.json]
-        panel.begin { response in
-            if response == .OK, let url = panel.url {
-                appState.importPreset(from: url)
-            }
-        }
+    private func openSettings() {
+        openSettingsAction()
     }
 }
