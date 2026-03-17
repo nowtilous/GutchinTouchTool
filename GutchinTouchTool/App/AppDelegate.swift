@@ -109,6 +109,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         menu.addItem(NSMenuItem.separator())
 
+        // Restart
+        let restartItem = NSMenuItem(title: "Restart", action: #selector(restartApp), keyEquivalent: "r")
+        restartItem.target = self
+        restartItem.image = NSImage(systemSymbolName: "arrow.clockwise", accessibilityDescription: nil)
+        menu.addItem(restartItem)
+
         // Quit
         let quitItem = NSMenuItem(title: "Quit GutchinTouchTool", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         quitItem.image = NSImage(systemSymbolName: "power", accessibilityDescription: nil)
@@ -145,6 +151,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
         // Fallback: try the known selector directly
         NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+    }
+
+    @objc private func restartApp() {
+        let url = Bundle.main.bundleURL
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/open")
+        task.arguments = ["-n", url.path]
+        try? task.run()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            NSApp.terminate(nil)
+        }
     }
 
     @objc private func checkForUpdates() {
