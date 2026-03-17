@@ -70,6 +70,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         openItem.image = NSImage(systemSymbolName: "macwindow", accessibilityDescription: nil)
         menu.addItem(openItem)
 
+        // Settings
+        let settingsItem = NSMenuItem(title: "Settings…", action: #selector(openSettings), keyEquivalent: ",")
+        settingsItem.target = self
+        settingsItem.image = NSImage(systemSymbolName: "gearshape", accessibilityDescription: nil)
+        menu.addItem(settingsItem)
+
         // Check for updates
         let updateItem = NSMenuItem(title: "Check for Updates…", action: #selector(checkForUpdates), keyEquivalent: "")
         updateItem.target = self
@@ -99,6 +105,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             appState?.toggleGlobalEnabled()
         }
         updateStatusIcon()
+    }
+
+    @objc private func openSettings() {
+        NSApp.activate(ignoringOtherApps: true)
+        // Find and invoke the Settings menu item from the app menu
+        if let appMenu = NSApp.mainMenu?.item(at: 0)?.submenu {
+            for item in appMenu.items {
+                if item.title.contains("Settings") || item.title.contains("Preferences") {
+                    _ = item.target?.perform(item.action, with: item)
+                    return
+                }
+            }
+        }
+        // Fallback: try the known selector directly
+        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
     }
 
     @objc private func checkForUpdates() {
