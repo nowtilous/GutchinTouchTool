@@ -51,6 +51,10 @@ class AppState: ObservableObject {
         self.currentPreset = preset
         self.selectedAppTarget = preset.appTargets.first ?? .allApps
         NSLog("[GTT] Loaded preset with %d triggers", preset.triggers.count)
+        // Create a backup on startup so there's always a recent copy
+        if preset.triggers.count > 0 {
+            presetManager.save(preset)
+        }
         // Schedule monitor start for next runloop iteration (self must be fully initialized first)
         // Skip automatic monitoring when running inside the unit-test host
         guard NSClassFromString("XCTestCase") == nil else { return }
