@@ -46,7 +46,7 @@ struct SettingsView: View {
             AboutSettingsView()
                 .tabItem { Label("About", systemImage: "info.circle") }
         }
-        .frame(width: 500, height: 360)
+        .frame(width: 500, height: 480)
     }
 }
 
