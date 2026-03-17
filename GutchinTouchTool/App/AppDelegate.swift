@@ -6,9 +6,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var onReady: (() -> Void)?
     var appState: AppState?
     private weak var mainWindow: NSWindow?
+    private var menuBarObserver: NSKeyValueObservation?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        setupMenuBarIcon()
+        let showIcon = UserDefaults.standard.object(forKey: "showMenuBarIcon") as? Bool ?? true
+        if showIcon {
+            setupMenuBarIcon()
+        }
+        observeMenuBarSetting()
         requestAccessibilityPermissions()
         requestAutomationPermission()
         ActionExecutor.startTrackingFrontApp()
@@ -36,12 +41,32 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     // MARK: - Menu Bar
 
     private func setupMenuBarIcon() {
+        guard statusItem == nil else { return }
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem?.button {
             button.image = NSImage(systemSymbolName: "hand.point.up.braille", accessibilityDescription: "GutchinTouchTool")
             button.action = #selector(statusItemClicked)
             button.target = self
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
+        }
+    }
+
+    private func removeMenuBarIcon() {
+        if let item = statusItem {
+            NSStatusBar.system.removeStatusItem(item)
+            statusItem = nil
+        }
+    }
+
+    private func observeMenuBarSetting() {
+        menuBarObserver = UserDefaults.standard.observe(\.showMenuBarIcon, options: [.new]) { [weak self] _, change in
+            DispatchQueue.main.async {
+                if change.newValue == true {
+                    self?.setupMenuBarIcon()
+                } else {
+                    self?.removeMenuBarIcon()
+                }
+            }
         }
     }
 
@@ -210,5 +235,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         } else {
             NSLog("[GTT] Accessibility already granted")
         }
+    }
+}
+
+extension UserDefaults {
+    @objc dynamic var showMenuBarIcon: Bool {
+        return object(forKey: "showMenuBarIcon") as? Bool ?? true
     }
 }
