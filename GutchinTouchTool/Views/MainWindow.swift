@@ -1,5 +1,125 @@
 import SwiftUI
 
+// Touch Viz — hand wiggles on hover
+struct TouchVizToolbarButton: View {
+    var isActive: Bool
+    let action: () -> Void
+
+    @State private var isHovering = false
+    @State private var wiggle: Double = 0
+
+    var body: some View {
+        Button(action: action) {
+            Label("Touch Viz", systemImage: "hand.point.up.braille.fill")
+                .foregroundStyle(isActive || isHovering ? Color.cyan : .secondary)
+                .rotationEffect(.degrees(wiggle), anchor: .bottom)
+        }
+        .onHover { hovering in
+            isHovering = hovering
+            if hovering {
+                withAnimation(.easeInOut(duration: 0.15).repeatForever(autoreverses: true)) {
+                    wiggle = 12
+                }
+            } else {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    wiggle = 0
+                }
+            }
+        }
+    }
+}
+
+// Console — cursor blink pulse on hover
+struct ConsoleToolbarButton: View {
+    var isActive: Bool
+    let action: () -> Void
+
+    @State private var isHovering = false
+    @State private var opacity: Double = 1
+
+    var body: some View {
+        Button(action: action) {
+            Label("Console", systemImage: "terminal.fill")
+                .foregroundStyle(isActive || isHovering ? Color.green : .secondary)
+                .opacity(isHovering ? opacity : 1)
+        }
+        .onHover { hovering in
+            isHovering = hovering
+            if hovering {
+                withAnimation(.easeInOut(duration: 0.4).repeatForever(autoreverses: true)) {
+                    opacity = 0.3
+                }
+            } else {
+                withAnimation(.easeOut(duration: 0.15)) {
+                    opacity = 1
+                }
+            }
+        }
+    }
+}
+
+// Appearance — sun/moon spins + bounces on hover
+struct AppearanceToolbarButton: View {
+    var isDark: Bool
+    let action: () -> Void
+
+    @State private var isHovering = false
+    @State private var rotation: Double = 0
+    @State private var bounce: CGFloat = 0
+
+    var body: some View {
+        Button(action: action) {
+            Label("Appearance", systemImage: isDark ? "moon.fill" : "sun.max.fill")
+                .foregroundStyle(isDark ? Color.indigo : .yellow)
+                .rotationEffect(.degrees(rotation))
+                .offset(y: bounce)
+        }
+        .onHover { hovering in
+            isHovering = hovering
+            if hovering {
+                withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
+                    rotation += 360
+                }
+                withAnimation(.easeInOut(duration: 0.3).repeatForever(autoreverses: true)) {
+                    bounce = -3
+                }
+            } else {
+                withAnimation(.easeOut(duration: 0.3)) {
+                    rotation = 0
+                    bounce = 0
+                }
+            }
+        }
+    }
+}
+
+// Settings — gear spins on hover
+struct SettingsToolbarButton: View {
+    let action: () -> Void
+    @State private var isHovering = false
+    @State private var rotation: Double = 0
+
+    var body: some View {
+        Button(action: action) {
+            Label("Settings", systemImage: "gearshape.fill")
+                .foregroundStyle(isHovering ? Color.primary : .secondary)
+                .rotationEffect(.degrees(rotation))
+        }
+        .onHover { hovering in
+            isHovering = hovering
+            if hovering {
+                withAnimation(.linear(duration: 1.5).repeatForever(autoreverses: false)) {
+                    rotation += 360
+                }
+            } else {
+                withAnimation(.easeOut(duration: 0.3)) {
+                    rotation = 0
+                }
+            }
+        }
+    }
+}
+
 struct MainWindow: View {
     @EnvironmentObject var appState: AppState
     @ObservedObject private var gestureLog = GestureLog.shared
@@ -99,29 +219,22 @@ struct MainWindow: View {
                 }
             }
             ToolbarItemGroup(placement: .primaryAction) {
-                Button(action: { withAnimation { showTouchVisualizer.toggle() } }) {
-                    Label("Touch Viz", systemImage: "hand.point.up.braille.fill")
-                        .foregroundStyle(showTouchVisualizer ? .cyan : .secondary)
-                }
-                Button(action: { withAnimation { showLog.toggle() } }) {
-                    Label("Console", systemImage: "terminal.fill")
-                        .foregroundStyle(showLog ? .green : .secondary)
+                TouchVizToolbarButton(isActive: showTouchVisualizer) {
+                    withAnimation { showTouchVisualizer.toggle() }
                 }
 
-                Button(action: {
+                ConsoleToolbarButton(isActive: showLog) {
+                    withAnimation { showLog.toggle() }
+                }
+
+                AppearanceToolbarButton(isDark: isDark) {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         appearance = isDark ? "light" : "dark"
                     }
-                }) {
-                    Label("Appearance", systemImage: isDark ? "moon.fill" : "sun.max.fill")
-                        .foregroundStyle(isDark ? .indigo : .yellow)
                 }
-                Button(action: {
-                    openSettings()
-                }) {
-                    Label("Settings", systemImage: "gearshape.fill")
-                }
-                .help("App Settings")
+
+                SettingsToolbarButton { openSettings() }
+                    .help("App Settings")
             }
         }
         .preferredColorScheme(appearance == "system" ? nil : (isDark ? .dark : .light))
