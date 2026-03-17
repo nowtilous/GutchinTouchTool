@@ -1,4 +1,5 @@
 import SwiftUI
+import ServiceManagement
 
 @main
 struct GutchinTouchToolApp: App {
@@ -51,7 +52,7 @@ struct SettingsView: View {
 
 struct GeneralSettingsView: View {
     @EnvironmentObject var appState: AppState
-    @AppStorage("launchAtLogin") private var launchAtLogin = false
+    @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @AppStorage("showMenuBarIcon") private var showMenuBarIcon = true
 
     var body: some View {
@@ -60,6 +61,18 @@ struct GeneralSettingsView: View {
                 .font(.headline)
             VStack(alignment: .leading, spacing: 10) {
                 Toggle("Launch at Login", isOn: $launchAtLogin)
+                    .onChange(of: launchAtLogin) { _, newValue in
+                        do {
+                            if newValue {
+                                try SMAppService.mainApp.register()
+                            } else {
+                                try SMAppService.mainApp.unregister()
+                            }
+                        } catch {
+                            NSLog("[GTT] Failed to update login item: %@", error.localizedDescription)
+                            launchAtLogin = SMAppService.mainApp.status == .enabled
+                        }
+                    }
                 Toggle("Show Menu Bar Icon", isOn: $showMenuBarIcon)
             }
             .padding(.leading, 4)
