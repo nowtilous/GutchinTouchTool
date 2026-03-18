@@ -125,6 +125,8 @@ struct MainWindow: View {
     @ObservedObject private var gestureLog = GestureLog.shared
     @State private var showLog = true
     @State private var showTouchVisualizer = true
+    @State private var showTutorial = !UserDefaults.hasSeenTutorial
+    @State private var tutorialFrames: [TutorialRegion: CGRect] = [:]
     @AppStorage("GTTAppearance") private var appearance: String = "dark"
     @Environment(\.openSettings) private var openSettingsAction
 
@@ -136,6 +138,7 @@ struct MainWindow: View {
             AppSidebar()
                 .frame(width: 200, alignment: .leading)
                 .fixedSize(horizontal: true, vertical: false)
+                .tutorialAnchor(.sidebar)
 
             Divider()
 
@@ -146,12 +149,15 @@ struct MainWindow: View {
                 HSplitView {
                     TriggerListPanel()
                         .frame(minWidth: 250, idealWidth: 300, maxWidth: 400)
+                        .tutorialAnchor(.triggers)
 
                     ActionListPanel()
                         .frame(minWidth: 220, idealWidth: 260, maxWidth: 350)
+                        .tutorialAnchor(.actions)
 
                     ConfigurationPanel()
                         .frame(minWidth: 280, idealWidth: 350)
+                        .tutorialAnchor(.config)
                 }
             }
 
@@ -187,6 +193,20 @@ struct MainWindow: View {
             }
         }
         .background(Color(nsColor: .windowBackgroundColor))
+        .coordinateSpace(name: "tutorialOverlay")
+        .onPreferenceChange(TutorialFramePreferenceKey.self) { tutorialFrames = $0 }
+        .overlay {
+            if showTutorial {
+                TutorialOverlayView(isPresented: $showTutorial, frames: tutorialFrames)
+                    .environmentObject(appState)
+            }
+        }
+        .onChange(of: appState.showTutorialRequested) { _, requested in
+            if requested {
+                showTutorial = true
+                appState.showTutorialRequested = false
+            }
+        }
         .navigationTitle("")
         .toolbar {
             ToolbarItem(placement: .navigation) {

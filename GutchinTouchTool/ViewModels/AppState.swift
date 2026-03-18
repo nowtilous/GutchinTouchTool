@@ -31,6 +31,7 @@ class AppState: ObservableObject {
     @Published var showingAddAction: Bool = false
     @Published var showingAddApp: Bool = false
     @Published var showStatistics: Bool = false
+    @Published var showTutorialRequested: Bool = false
     @Published var globalEnabled: Bool = UserDefaults.standard.object(forKey: "GTTGlobalEnabled") as? Bool ?? true
     @Published var accentColorChoice: AccentColorChoice = {
         if let raw = UserDefaults.standard.string(forKey: "GTTAccentColor"),
