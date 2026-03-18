@@ -198,7 +198,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         return false
     }
 
-    @objc private func showMainWindow() {
+    @objc func showMainWindow() {
         NSApp.activate(ignoringOtherApps: true)
         if let window = mainWindow {
             window.makeKeyAndOrderFront(nil)

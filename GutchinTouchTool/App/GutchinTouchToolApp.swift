@@ -1,5 +1,6 @@
 import SwiftUI
 import ServiceManagement
+import AppKit
 
 @main
 struct GutchinTouchToolApp: App {
@@ -97,6 +98,17 @@ struct GeneralSettingsView: View {
 
             Divider()
 
+            Text("Help")
+                .font(.headline)
+            Button {
+                showTutorialFromSettings()
+            } label: {
+                Label("Show Tutorial", systemImage: "questionmark.circle")
+            }
+            .padding(.leading, 4)
+
+            Divider()
+
             HStack {
                 Text("Preset File")
                     .foregroundColor(.secondary)
@@ -121,6 +133,17 @@ struct GeneralSettingsView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func showTutorialFromSettings() {
+        // Capture Settings window before we switch focus (it's key when we're in Settings)
+        let settingsWindow = NSApp.keyWindow
+        // Bring main window to front
+        (NSApp.delegate as? AppDelegate)?.showMainWindow()
+        // Close Settings window
+        settingsWindow?.close()
+        // Request tutorial on main window
+        appState.showTutorialRequested = true
     }
 
     private func exportPreset() {
@@ -154,7 +177,7 @@ struct GeneralSettingsView: View {
         if alert.runModal() == .alertFirstButtonReturn {
             let keys = ["GTTGlobalEnabled", "GTTAccentColor", "GTTAppearance",
                         "GTTPressDragThreshold", "GTTTipTapMinRestTime",
-                        "GTTSuppressMouseDuringDrawing", "launchAtLogin", "showMenuBarIcon"]
+                        "GTTSuppressMouseDuringDrawing", "launchAtLogin", "showMenuBarIcon", "GTTHasSeenTutorial"]
             for key in keys {
                 UserDefaults.standard.removeObject(forKey: key)
             }
