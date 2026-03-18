@@ -96,30 +96,6 @@ extension View {
     }
 }
 
-struct ArrowShape: Shape {
-    let from: CGPoint
-    let to: CGPoint
-
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: from)
-        path.addLine(to: to)
-        return path
-    }
-}
-
-struct ArrowheadShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY * 0.7))
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
-        path.closeSubpath()
-        return path
-    }
-}
-
 struct CutoutMaskShape: Shape {
     let fullRect: CGRect
     let cutout: CGRect
@@ -132,19 +108,11 @@ struct CutoutMaskShape: Shape {
     }
 }
 
-struct CardFramePreferenceKey: PreferenceKey {
-    static var defaultValue: CGRect = .zero
-    static func reduce(value: inout CGRect, nextValue: () -> CGRect) {
-        value = nextValue()
-    }
-}
-
 struct TutorialOverlayView: View {
     @EnvironmentObject var appState: AppState
     @Binding var isPresented: Bool
     var frames: [TutorialRegion: CGRect]
     @State private var currentStep: TutorialStep = .welcome
-    @State private var cardFrame: CGRect = .zero
 
     private var highlightRect: CGRect? {
         guard let region = currentStep.highlightRegion else { return nil }
@@ -166,9 +134,6 @@ struct TutorialOverlayView: View {
             // Dim overlay with spotlight cutout
             dimOverlay
 
-            // Arrow pointing to highlight
-            arrowOverlay
-
             // Tutorial card — positioned to avoid obscuring the spotlight
             VStack {
                 Spacer()
@@ -183,40 +148,9 @@ struct TutorialOverlayView: View {
                 }
                 .padding(.horizontal, 40)
                 .padding(.bottom, 40)
-                .background(
-                        GeometryReader { g in
-                            Color.clear.preference(
-                                key: CardFramePreferenceKey.self,
-                                value: g.frame(in: .named("tutorialOverlay"))
-                            )
-                        }
-                    )
             }
-            .onPreferenceChange(CardFramePreferenceKey.self) { cardFrame = $0 }
         }
         .allowsHitTesting(true)
-    }
-
-    private var arrowOverlay: some View {
-        GeometryReader { _ in
-            if let target = highlightRect, target.width > 20, target.height > 20, !cardFrame.isEmpty {
-                let from = CGPoint(x: cardFrame.midX, y: cardFrame.minY - 12)
-                let to = CGPoint(x: target.midX, y: target.midY)
-                let accent = appState.accentColorChoice.color
-                ZStack {
-                    ArrowShape(from: from, to: to)
-                        .stroke(Color.white.opacity(0.9), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                    ArrowShape(from: from, to: to)
-                        .stroke(accent, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
-                    ArrowheadShape()
-                        .fill(accent)
-                        .frame(width: 20, height: 20)
-                        .position(to)
-                        .rotationEffect(.radians(atan2(to.y - from.y, to.x - from.x) + Double.pi / 2))
-                }
-                .shadow(color: .black.opacity(0.4), radius: 6)
-            }
-        }
     }
 
     private var dimOverlay: some View {
@@ -322,17 +256,6 @@ struct TutorialOverlayView: View {
     }
 }
 
-struct TutorialView: View {
-    @EnvironmentObject var appState: AppState
-    @Binding var isPresented: Bool
-    var frames: [TutorialRegion: CGRect] = [:]
-
-    var body: some View {
-        TutorialOverlayView(isPresented: $isPresented, frames: frames)
-            .environmentObject(appState)
-    }
-}
-
 // Renders body text with {{plus}} replaced by the actual SF Symbol
 private func tutorialBodyText(_ text: String) -> Text {
     let parts = text.split(separator: "{{plus}}", omittingEmptySubsequences: false)
@@ -410,6 +333,6 @@ struct TutorialSheetView: View {
 }
 
 #Preview {
-    TutorialView(isPresented: .constant(true))
+    TutorialOverlayView(isPresented: .constant(true), frames: [:])
         .environmentObject(AppState())
 }
