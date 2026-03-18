@@ -35,7 +35,7 @@ enum TutorialStep: Int, CaseIterable {
         case .welcome:
             return "GutchinTouchTool turns your trackpad into a programmable input surface.\n\nMap 30+ gesture types — swipes, taps, pinches, circles, edge slides — to keyboard shortcuts, window management, media controls, scripts, and more."
         case .sidebar:
-            return "Choose which apps your gestures apply to.\n\n\"All Apps\" means global — gestures work everywhere.\n\nAdd specific apps (e.g. Safari, Xcode) for per-app bindings.\n\nTip: app-specific triggers override global ones."
+            return "Choose which apps your gestures apply to.\n\n\"All Apps\" means global — gestures work everywhere.\n\nAdd specific apps (e.g. Safari, Slack, Cursor) for per-app bindings.\n\nTip: app-specific triggers override global ones."
         case .triggers:
             return "Your gesture bindings.\n\nPick from Trackpad, Keyboard, Mouse, or Drawing triggers.\n\nTrackpad offers 2–5 finger swipes, taps, pinches, TipTaps, edge slides, and corner clicks.\n\nClick {{plus}} to add a trigger."
         case .actions:
