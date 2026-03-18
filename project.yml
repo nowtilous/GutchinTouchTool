@@ -25,11 +25,6 @@ targets:
         CODE_SIGNING_REQUIRED: "NO"
         DEVELOPMENT_TEAM: ""
         GENERATE_INFOPLIST_FILE: "NO"
-    preBuildScripts:
-      - name: Reset TCC Permissions
-        script: |
-          tccutil reset Accessibility com.gutchin.touchtool 2>/dev/null || true
-          tccutil reset AppleEvents com.gutchin.touchtool 2>/dev/null || true
 
   GutchinTouchToolTests:
     type: bundle.unit-test

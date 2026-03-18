@@ -269,69 +269,6 @@ private func tutorialBodyText(_ text: String) -> Text {
     return result
 }
 
-// Sheet-based tutorial (for Settings "Show Tutorial" - no highlight)
-struct TutorialSheetView: View {
-    @EnvironmentObject var appState: AppState
-    @Binding var isPresented: Bool
-    @State private var currentStep: TutorialStep = .welcome
-
-    var body: some View {
-        VStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(currentStep.title)
-                    .font(.title2)
-                ScrollView {
-                    tutorialBodyText(currentStep.bodyText)
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .frame(maxHeight: 150)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(24)
-
-            Divider()
-
-            HStack {
-                Button("Skip") {
-                    UserDefaults.hasSeenTutorial = true
-                    isPresented = false
-                }
-                .buttonStyle(.plain)
-                .foregroundColor(.secondary)
-                if currentStep.rawValue > 0 {
-                    Button("Back") {
-                        currentStep = TutorialStep(rawValue: currentStep.rawValue - 1)!
-                    }
-                }
-                Spacer()
-                HStack(spacing: 6) {
-                    ForEach(0..<TutorialStep.allCases.count, id: \.self) { i in
-                        Circle()
-                            .fill(i == currentStep.rawValue ? appState.accentColorChoice.color : Color.gray.opacity(0.4))
-                            .frame(width: 6, height: 6)
-                    }
-                }
-                Spacer()
-                if currentStep.isLast {
-                    Button("Done") { isPresented = false }
-                        .buttonStyle(.borderedProminent)
-                        .tint(appState.accentColorChoice.color)
-                } else {
-                    Button("Next") {
-                        currentStep = TutorialStep(rawValue: currentStep.rawValue + 1)!
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(appState.accentColorChoice.color)
-                }
-            }
-            .padding(20)
-        }
-        .frame(width: 520, height: 360)
-    }
-}
-
 #Preview {
     TutorialOverlayView(isPresented: .constant(true), frames: [:])
         .environmentObject(AppState())

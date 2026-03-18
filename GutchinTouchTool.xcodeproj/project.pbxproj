@@ -219,7 +219,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 072CB362C302F73CB9FD6B79 /* Build configuration list for PBXNativeTarget "GutchinTouchTool" */;
 			buildPhases = (
-				8ADB79A1414757B756B8C5C6 /* Reset TCC Permissions */,
 				8F65FDE81A152909BC6B27C5 /* Sources */,
 				723510EEF08CF65C7119912D /* Resources */,
 			);
@@ -296,27 +295,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		8ADB79A1414757B756B8C5C6 /* Reset TCC Permissions */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Reset TCC Permissions";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "tccutil reset Accessibility com.gutchin.touchtool 2>/dev/null || true\ntccutil reset AppleEvents com.gutchin.touchtool 2>/dev/null || true\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8F65FDE81A152909BC6B27C5 /* Sources */ = {
