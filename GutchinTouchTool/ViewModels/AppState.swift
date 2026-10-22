@@ -32,6 +32,7 @@ class AppState: ObservableObject {
     @Published var showingAddApp: Bool = false
     @Published var showStatistics: Bool = false
     @Published var showTutorialRequested: Bool = false
+    @Published var isMainWindowVisible: Bool = true
     @Published var globalEnabled: Bool = UserDefaults.standard.object(forKey: "GTTGlobalEnabled") as? Bool ?? true
     @Published var accentColorChoice: AccentColorChoice = {
         if let raw = UserDefaults.standard.string(forKey: "GTTAccentColor"),
@@ -164,8 +165,15 @@ class AppState: ObservableObject {
     }
 
     func refreshMonitors() {
-        let allTriggers = currentPreset.triggers.filter { $0.isEnabled }
-        NSLog("[GTT] Refreshing monitors with %d enabled triggers (global: %@)", allTriggers.count, globalEnabled ? "ON" : "OFF")
+        guard globalEnabled else {
+            NSLog("[GTT] Global toggle is OFF, unregistering all monitors")
+            keyboardMonitor.unregisterAll()
+            trackpadMonitor.unregisterAll()
+            mouseButtonMonitor.unregisterAll()
+            return
+        }
+        let allTriggers = currentPreset.triggers.filter { $0.isEnabled && (!$0.actions.isEmpty || $0.suppressClick) }
+        NSLog("[GTT] Refreshing monitors with %d enabled triggers with actions (global: %@)", allTriggers.count, globalEnabled ? "ON" : "OFF")
         keyboardMonitor.registerTriggers(allTriggers)
         trackpadMonitor.registerTriggers(allTriggers)
         mouseButtonMonitor.registerTriggers(allTriggers)

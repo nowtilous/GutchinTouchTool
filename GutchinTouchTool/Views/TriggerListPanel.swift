@@ -191,10 +191,10 @@ struct TriggerCategoryTabBar: View {
 
 struct TriggerRow: View {
     let trigger: Trigger
-    @ObservedObject private var liveState = LiveTouchState.shared
+    @ObservedObject private var flashState = TriggerFlashState.shared
 
     private var isFlashing: Bool {
-        liveState.lastFiredTriggerID == trigger.id
+        flashState.lastFiredTriggerID == trigger.id
     }
 
     var body: some View {

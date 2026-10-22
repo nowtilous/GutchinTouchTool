@@ -593,4 +593,84 @@ final class TrackpadPipelineTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: "GTTGlobalEnabled")
         monitor.unregisterAll()
     }
+
+    // MARK: - Mouse suppression & click-drag tests
+
+    func testNoDrawingTriggersDoesNotActivateMouseSuppression() {
+        var trigger = Trigger(name: "Swipe", input: .trackpadGesture(.twoFingerSwipeUp))
+        trigger.actions = [TriggerAction(actionType: .volumeUp)]
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        XCTAssertFalse(monitor.isMouseSuppressedForTest, "Mouse suppression should be inactive initially")
+
+        let now = Date().timeIntervalSince1970
+        for i in 0..<25 {
+            monitor.handleMultitouchFrame(rawTouches: nil, numTouches: 1, timestamp: now + Double(i) * 0.01)
+        }
+
+        XCTAssertFalse(monitor.isMouseSuppressedForTest, "Mouse suppression should NOT be activated without drawing triggers")
+        monitor.unregisterAll()
+    }
+
+    func testTriangleGestureDoesNotActivateMouseSuppression() {
+        var trigger = Trigger(name: "Triangle", input: .trackpadGesture(.drawTriangle))
+        trigger.actions = [TriggerAction(actionType: .lockScreen)]
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        XCTAssertFalse(monitor.isMouseSuppressedForTest, "Mouse suppression should be inactive initially")
+
+        let now = Date().timeIntervalSince1970
+        for i in 0..<25 {
+            monitor.handleMultitouchFrame(rawTouches: nil, numTouches: 1, timestamp: now + Double(i) * 0.01)
+        }
+
+        XCTAssertFalse(monitor.isMouseSuppressedForTest, "Triangle gesture tracking must never suppress mouse speculatively")
+        monitor.unregisterAll()
+    }
+
+    // MARK: - Selective Recognition Tests
+
+    func testTriggerWithoutActionIsNotRecognized() {
+        let expectation = expectation(description: "Trigger without action should NOT fire")
+        expectation.isInverted = true
+
+        let trigger = Trigger(name: "Empty Action Tap", input: .trackpadGesture(.fourFingerTap))
+        // actions array is empty
+
+        let monitor = TrackpadMonitor()
+        monitor.registerTriggers([trigger])
+
+        ActionExecutor.onActionExecuted = { _ in expectation.fulfill() }
+
+        let now = Date().timeIntervalSince1970
+        monitor.handleMultitouchFrame(rawTouches: nil, numTouches: 4, timestamp: now)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            monitor.handleMultitouchFrame(rawTouches: nil, numTouches: 0, timestamp: now + 0.1)
+        }
+
+        waitForExpectations(timeout: 1.0)
+        monitor.unregisterAll()
+    }
+
+    func testMultitouchOnlyActiveWhenRequired() {
+        let monitor = TrackpadMonitor()
+
+        // 1. Only 2-finger swipe registered -> no multitouch needed
+        var swipeTrigger = Trigger(name: "2F Swipe", input: .trackpadGesture(.twoFingerSwipeUp))
+        swipeTrigger.actions = [TriggerAction(actionType: .volumeUp)]
+        monitor.registerTriggers([swipeTrigger])
+        XCTAssertFalse(monitor.isMultitouchActiveForTest, "2-finger swipe should not activate private MultitouchSupport")
+
+        // 2. 4-finger tap registered -> multitouch is needed
+        var tapTrigger = Trigger(name: "4F Tap", input: .trackpadGesture(.fourFingerTap))
+        tapTrigger.actions = [TriggerAction(actionType: .volumeDown)]
+        monitor.registerTriggers([tapTrigger])
+        // If multitouch device is available on the machine, it should be active;
+        // if in headless/CI with 0 devices, it handles gracefully.
+        // What matters is that unregisterAll stops it:
+        monitor.unregisterAll()
+        XCTAssertFalse(monitor.isMultitouchActiveForTest, "Unregistering all must deactivate multitouch")
+    }
 }

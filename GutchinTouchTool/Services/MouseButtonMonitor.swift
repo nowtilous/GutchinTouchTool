@@ -11,7 +11,9 @@ class MouseButtonMonitor {
     func registerTriggers(_ triggers: [Trigger]) {
         unregisterAll()
         let mouseTriggers = triggers.filter {
-            if case .mouseButton = $0.input { return $0.isEnabled }
+            if case .mouseButton = $0.input {
+                return $0.isEnabled && (!$0.actions.isEmpty || $0.suppressClick)
+            }
             return false
         }
 

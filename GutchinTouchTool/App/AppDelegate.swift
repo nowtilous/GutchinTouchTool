@@ -195,11 +195,35 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         sender.orderOut(nil)
+        MainActor.assumeIsolated {
+            appState?.isMainWindowVisible = false
+        }
+        LiveTouchState.setActive(false)
         return false
+    }
+
+    func windowDidMiniaturize(_ notification: Notification) {
+        MainActor.assumeIsolated {
+            appState?.isMainWindowVisible = false
+        }
+        LiveTouchState.setActive(false)
+    }
+
+    func windowDidDeminiaturize(_ notification: Notification) {
+        MainActor.assumeIsolated {
+            appState?.isMainWindowVisible = true
+        }
+        let showViz = UserDefaults.standard.bool(forKey: "GTTShowTouchVisualizer")
+        LiveTouchState.setActive(showViz)
     }
 
     @objc func showMainWindow() {
         NSApp.activate(ignoringOtherApps: true)
+        MainActor.assumeIsolated {
+            appState?.isMainWindowVisible = true
+        }
+        let showViz = UserDefaults.standard.bool(forKey: "GTTShowTouchVisualizer")
+        LiveTouchState.setActive(showViz)
         if let window = mainWindow {
             window.makeKeyAndOrderFront(nil)
         } else {

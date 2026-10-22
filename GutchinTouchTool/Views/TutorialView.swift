@@ -269,7 +269,11 @@ private func tutorialBodyText(_ text: String) -> Text {
     return result
 }
 
-#Preview {
-    TutorialOverlayView(isPresented: .constant(true), frames: [:])
-        .environmentObject(AppState())
+#if DEBUG
+struct TutorialView_Previews: PreviewProvider {
+    static var previews: some View {
+        TutorialOverlayView(isPresented: .constant(true), frames: [:])
+            .environmentObject(AppState())
+    }
 }
+#endif

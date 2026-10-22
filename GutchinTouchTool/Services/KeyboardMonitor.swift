@@ -140,7 +140,9 @@ class KeyboardMonitor: ObservableObject {
     func registerTriggers(_ triggers: [Trigger]) {
         unregisterAll()
         let keyboardTriggers = triggers.filter {
-            if case .keyboardShortcut = $0.input { return $0.isEnabled }
+            if case .keyboardShortcut = $0.input {
+                return $0.isEnabled && !$0.actions.isEmpty
+            }
             return false
         }
 

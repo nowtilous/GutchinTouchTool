@@ -34,8 +34,23 @@ struct GesturePreviewView: View {
             }
             .frame(width: 180, height: 140)
             .clipped()
-            .onAppear { startAnimation() }
-            .onChange(of: gesture) { _ in restartAnimation() }
+            .onAppear {
+                if appState.isMainWindowVisible {
+                    startAnimation()
+                }
+            }
+            .onChange(of: gesture) { _ in
+                if appState.isMainWindowVisible {
+                    restartAnimation()
+                }
+            }
+            .onChange(of: appState.isMainWindowVisible) { _, isVisible in
+                if isVisible {
+                    startAnimation()
+                } else {
+                    animating = false
+                }
+            }
 
             Text(gesture.rawValue)
                 .font(.caption)
@@ -46,16 +61,26 @@ struct GesturePreviewView: View {
     }
 
     private func startAnimation() {
+        guard appState.isMainWindowVisible else {
+            animating = false
+            return
+        }
         animating = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            guard self.appState.isMainWindowVisible else { return }
             withAnimation { animating = true }
         }
     }
 
     private func restartAnimation() {
+        guard appState.isMainWindowVisible else {
+            animating = false
+            return
+        }
         animating = false
         animationID = UUID()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            guard self.appState.isMainWindowVisible else { return }
             withAnimation { animating = true }
         }
     }
@@ -235,7 +260,7 @@ struct SwipeAnimation: View {
                 )
         }
         .animation(
-            .easeInOut(duration: 1.0).repeatForever(autoreverses: true),
+            animating ? .easeInOut(duration: 1.0).repeatForever(autoreverses: true) : .default,
             value: animating
         )
     }
@@ -296,7 +321,7 @@ struct TapAnimation: View {
             }
         }
         .animation(
-            .easeInOut(duration: 0.6).repeatForever(autoreverses: true),
+            animating ? .easeInOut(duration: 0.6).repeatForever(autoreverses: true) : .default,
             value: animating
         )
     }
@@ -309,6 +334,7 @@ struct DoubleTapAnimation: View {
     let animating: Bool
     @Environment(\.themeColor) private var themeColor
     @State private var phase: Int = 0
+    @State private var isVisible = false
 
     var body: some View {
         let spacing: CGFloat = 14
@@ -329,15 +355,25 @@ struct DoubleTapAnimation: View {
                 .offset(y: 28)
                 .opacity(phase == 2 ? 1 : 0)
         }
-        .onAppear { runDoubleTap() }
-        .onChange(of: animating) { _ in runDoubleTap() }
+        .onAppear {
+            isVisible = true
+            if animating { runDoubleTap() }
+        }
+        .onDisappear {
+            isVisible = false
+        }
+        .onChange(of: animating) { _, isAnimating in
+            if isAnimating && isVisible { runDoubleTap() }
+        }
     }
 
     private func runDoubleTap() {
+        guard isVisible && animating else { return }
         phase = 0
         func tap(at time: Double, p: Int) {
             DispatchQueue.main.asyncAfter(deadline: .now() + time) {
-                withAnimation(.easeInOut(duration: 0.15)) { phase = p }
+                guard self.isVisible && self.animating else { return }
+                withAnimation(.easeInOut(duration: 0.15)) { self.phase = p }
             }
         }
         tap(at: 0.3, p: 1)
@@ -345,7 +381,10 @@ struct DoubleTapAnimation: View {
         tap(at: 0.7, p: 2)
         tap(at: 0.9, p: 0)
         // Loop
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { runDoubleTap() }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
+            guard self.isVisible && self.animating else { return }
+            self.runDoubleTap()
+        }
     }
 }
 
@@ -366,7 +405,7 @@ struct PinchAnimation: View {
                 .offset(x: animating ? closed : spread, y: animating ? closed : spread)
         }
         .animation(
-            .easeInOut(duration: 0.9).repeatForever(autoreverses: true),
+            animating ? .easeInOut(duration: 0.9).repeatForever(autoreverses: true) : .default,
             value: animating
         )
     }
@@ -387,7 +426,7 @@ struct RotateAnimation: View {
         }
         .rotationEffect(.degrees(animating ? (clockwise ? 45 : -45) : 0))
         .animation(
-            .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
+            animating ? .easeInOut(duration: 0.8).repeatForever(autoreverses: true) : .default,
             value: animating
         )
     }
@@ -400,6 +439,7 @@ struct TipTapAnimation: View {
     let direction: TipTapDir
     let animating: Bool
     @State private var tapping = false
+    @State private var isVisible = false
 
     var body: some View {
         ZStack {
@@ -429,15 +469,29 @@ struct TipTapAnimation: View {
                     .offset(y: tapping ? 0 : -12)
             }
         }
-        .onAppear { runTipTap() }
+        .onAppear {
+            isVisible = true
+            if animating { runTipTap() }
+        }
+        .onDisappear {
+            isVisible = false
+        }
+        .onChange(of: animating) { _, isAnimating in
+            if isAnimating && isVisible { runTipTap() }
+        }
     }
 
     private func runTipTap() {
+        guard isVisible && animating else { return }
         withAnimation(.easeOut(duration: 0.2)) { tapping = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-            withAnimation(.easeIn(duration: 0.2)) { tapping = false }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { [self] in
+            guard self.isVisible && self.animating else { return }
+            withAnimation(.easeIn(duration: 0.2)) { self.tapping = false }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { runTipTap() }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
+            guard self.isVisible && self.animating else { return }
+            self.runTipTap()
+        }
     }
 }
 
@@ -448,10 +502,17 @@ struct CircleAnimation: View {
     let animating: Bool
 
     var body: some View {
-        TimelineView(.animation) { timeline in
+        if animating {
+            TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: !animating)) { timeline in
+                CircleAnimationContent(
+                    clockwise: clockwise,
+                    date: timeline.date
+                )
+            }
+        } else {
             CircleAnimationContent(
                 clockwise: clockwise,
-                date: timeline.date
+                date: Date(timeIntervalSinceReferenceDate: 0)
             )
         }
     }
@@ -520,8 +581,12 @@ struct TriangleDrawAnimation: View {
     let animating: Bool
 
     var body: some View {
-        TimelineView(.animation) { timeline in
-            TriangleDrawContent(date: timeline.date)
+        if animating {
+            TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: !animating)) { timeline in
+                TriangleDrawContent(date: timeline.date)
+            }
+        } else {
+            TriangleDrawContent(date: Date(timeIntervalSinceReferenceDate: 0))
         }
     }
 }
@@ -623,7 +688,20 @@ struct EdgeDragAnimation: View {
             FingerDot(size: 16)
                 .offset(x: edgeX, y: startY + (endY - startY) * progress)
         }
-        .onAppear { startLoop() }
+        .onAppear {
+            if animating { startLoop() }
+        }
+        .onChange(of: animating) { _, isAnimating in
+            if isAnimating {
+                startLoop()
+            } else {
+                var transaction = Transaction()
+                transaction.disablesAnimations = true
+                withTransaction(transaction) {
+                    progress = 0
+                }
+            }
+        }
     }
 
     private func startLoop() {
@@ -644,6 +722,7 @@ struct PositionClickAnimation: View {
     let animating: Bool
     @Environment(\.themeColor) private var themeColor
     @State private var pressing = false
+    @State private var isVisible = false
 
     var body: some View {
         ZStack {
@@ -664,15 +743,29 @@ struct PositionClickAnimation: View {
                 .frame(width: pressing ? 36 : 16, height: pressing ? 36 : 16)
                 .offset(x: dotX, y: dotY)
         }
-        .onAppear { runPress() }
+        .onAppear {
+            isVisible = true
+            if animating { runPress() }
+        }
+        .onDisappear {
+            isVisible = false
+        }
+        .onChange(of: animating) { _, isAnimating in
+            if isAnimating && isVisible { runPress() }
+        }
     }
 
     private func runPress() {
+        guard isVisible && animating else { return }
         withAnimation(.easeOut(duration: 0.25)) { pressing = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            withAnimation(.easeIn(duration: 0.25)) { pressing = false }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+            guard self.isVisible && self.animating else { return }
+            withAnimation(.easeIn(duration: 0.25)) { self.pressing = false }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { runPress() }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [self] in
+            guard self.isVisible && self.animating else { return }
+            self.runPress()
+        }
     }
 
     private var dotX: CGFloat {

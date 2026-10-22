@@ -27,12 +27,16 @@ class GestureStatistics: ObservableObject {
     private let sessionStartKey = "GTTSessionStart"
     private let eventsKey = "GTTGestureEvents"
 
+    private var isTestInstance = false
+    private var saveTask: Task<Void, Never>?
+
     private init() {
         load()
     }
 
     /// Test-only initializer — creates an isolated instance that does not touch UserDefaults
     init(testEvents: [GestureEvent], totalGestures: Int = 0, totalFired: Int = 0) {
+        self.isTestInstance = true
         self.events = testEvents
         self.totalGestures = totalGestures
         self.totalFired = totalFired
@@ -42,12 +46,18 @@ class GestureStatistics: ObservableObject {
     func recordDetection(_ gesture: String) {
         totalGestures += 1
         events.append(GestureEvent(gesture: gesture, timestamp: Date(), fired: false))
+        if events.count > 1000 {
+            events.removeFirst(events.count - 1000)
+        }
         save()
     }
 
     func recordFire(_ gesture: String) {
         totalFired += 1
         events.append(GestureEvent(gesture: gesture, timestamp: Date(), fired: true))
+        if events.count > 1000 {
+            events.removeFirst(events.count - 1000)
+        }
         save()
     }
 
@@ -60,11 +70,12 @@ class GestureStatistics: ObservableObject {
     }
 
     func reset() {
+        saveTask?.cancel()
         totalGestures = 0
         totalFired = 0
         events = []
         sessionStart = Date()
-        save()
+        persistToUserDefaults()
     }
 
     var unmatchedCount: Int {
@@ -91,6 +102,17 @@ class GestureStatistics: ObservableObject {
     }
 
     private func save() {
+        guard !isTestInstance else { return }
+        saveTask?.cancel()
+        saveTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            guard !Task.isCancelled else { return }
+            self.persistToUserDefaults()
+        }
+    }
+
+    private func persistToUserDefaults() {
+        guard !isTestInstance else { return }
         if let data = try? JSONEncoder().encode(events) {
             UserDefaults.standard.set(data, forKey: eventsKey)
         }
